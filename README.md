@@ -46,6 +46,43 @@ lead-lag edge). What earns its keep is **owning the four blocks as a diversified
 (`research/`). The interlock is a risk map; diversification is the edge. No live driver; nothing validated
 to the spine's bar.
 
+## The derivatives reference — catalog, pricing, analytics
+
+Block's second and larger half is the platform's **derivatives reference layer**: the definitive institutional
+taxonomy (equity, FX, rates, credit, commodities, municipals, funding), made computable and held to the same
+verify-before-claim discipline as the rest of Blaque Baux.
+
+- **[`catalog/`](catalog/) — 80 strategy building blocks.** A machine-readable taxonomy
+  ([`derivatives_catalog.json`](catalog/derivatives_catalog.json), [`schema.json`](catalog/schema.json)):
+  parties, cash-flow legs, parameters, payoff, variants, and the documented **combination/hedging** plays for
+  each. Every entry is a *building block, not standalone alpha* — the value is in composition. Status ladder
+  `reference → spec → implemented → validated`.
+- **[`pricing/`](pricing/) — reference pricers**, one per major class, keyed to the catalog `id` and each
+  proven against its textbook identity (all pass): IRS (par swap = 0 value), FX forward (covered interest
+  parity), Black-Scholes option (put-call parity), CDS (credit triangle).
+- **[`analytics/`](analytics/) — the cross-cutting layer**: index calculation + the divisor (rebalance
+  continuity), price-movement correlation → basket variance / diversification ratio / **implied correlation**,
+  beta & sensitivity, dividends & corporate-action adjustments, and the index-vs-basket basis. 12 identities,
+  all verified.
+- **[`docs/derivatives_framework.md`](docs/derivatives_framework.md)** ties it together; two plays are on the
+  record — a **collar guardrail** (SPY Sharpe 1.01→1.39, tail capped, at the cost of upside) and the
+  **correlation-regime** finding (diversification collapses in stress, exactly when it's needed).
+
+The through-line: every readout is a **guardrail, not a signal** — what a bespoke book actually owns and where
+it's exposed. None of these blocks is a money-maker alone; the value is the comfort and control they lend.
+
+## About Blaque Baux
+
+**Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
+[**BlaqueBaux.com**](https://blaquebaux.com) is the home for the work; the code lives here on GitHub — open to
+study, test, and build bespoke strategies on top of.
+
+Anyone can point an AI at a market. The edge is **understanding what the data actually says — and turning it
+into something you can act on.** We test relentlessly and put most of it *on the record as rejected, with the
+reason*; what survives is built, governed, and validated before it is ever called real. That combination —
+honest research, reproducible evidence, and execution you can trust — is why Carter Warrens leads on
+**strategy and implementation**, not merely uses the tools everyone now has.
+
 ## The Blaque Baux family
 This repo is one sleeve of the **Blaque Baux** family — a single governed engine steered in
 many directions. The [core repo](https://github.com/Carter-Warrens/blaquebaux) is the
@@ -54,7 +91,11 @@ base/blueprint and holds the [full family roster](https://github.com/Carter-Warr
 ## Layout
 ```
 engine/     the Blaque Baux platform (git submodule -> Carter-Warrens/blaquebaux)
-research/   three Path-A sketches (linkage web, linkages tested, tradeability) + scorecard
+catalog/    80-block derivatives taxonomy (JSON + schema + index) — the backbone
+pricing/    reference pricers (IRS / FX forward / Black-Scholes / CDS) + identity self-test
+analytics/  index / correlation / beta / corporate-action layer + self-test
+docs/       derivatives_framework.md — the seven considerations, computed and proven
+research/   cross-asset linkage sketches + the collar & correlation-regime plays
 live/       governed live drivers (once a sleeve graduates to paper A/B)
 ```
 
