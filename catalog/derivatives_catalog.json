@@ -106,7 +106,7 @@
       "use": "core rate hedge/speculation building block",
       "deck_slide": 3,
       "detail_level": "full",
-      "status": "reference",
+      "status": "implemented",
       "asset_class": "rates"
     },
     {
@@ -550,7 +550,8 @@
       "deck_slide": 15,
       "detail_level": "diagram",
       "status": "reference",
-      "asset_class": "rates"
+      "asset_class": "rates",
+      "combination_research": "collar_overlay.jl \u2014 guardrail: SPY Sharpe 1.01->1.39, tail -18% vs -24%, at the cost of upside"
     },
     {
       "id": "cap_floor_straddle",
@@ -1114,7 +1115,7 @@
       "use": "lock a future FX rate",
       "deck_slide": 10,
       "detail_level": "diagram",
-      "status": "reference",
+      "status": "implemented",
       "asset_class": "fx"
     },
     {
@@ -1749,7 +1750,7 @@
       "use": "standard FX option",
       "deck_slide": 13,
       "detail_level": "diagram",
-      "status": "reference",
+      "status": "implemented",
       "asset_class": "fx"
     },
     {
@@ -2765,7 +2766,7 @@
       "use": "single-name credit protection",
       "deck_slide": 4,
       "detail_level": "full",
-      "status": "reference",
+      "status": "implemented",
       "asset_class": "credit"
     },
     {

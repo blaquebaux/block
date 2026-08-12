@@ -445,10 +445,15 @@ asset_classes = {
  "municipal": "Municipal / MMD derivatives",
  "funding": "Funding, deposit & cost-of-funds instruments",
 }
+# blocks that now have reference pricing code (pricing/block_pricing.jl, proven in pricing_selftest.jl)
+IMPLEMENTED = {"irs_vanilla", "fx_outright_forward", "fx_vanilla", "cds_single"}
 all_entries = []
 for ac in asset_classes:
     for e in CATALOG.get(ac, []):
-        e["asset_class"] = ac          # stamp each entry so the JSON is self-describing
+        e["asset_class"] = ac                        # stamp each entry so the JSON is self-describing
+        e["id"] in IMPLEMENTED and e.__setitem__("status", "implemented")
+        if e["id"] == "collar":                      # first combination play tested (research/collar_overlay.jl)
+            e["combination_research"] = "collar_overlay.jl — guardrail: SPY Sharpe 1.01->1.39, tail -18% vs -24%, at the cost of upside"
         all_entries.append(e)
 doc = {
  "_meta": {
