@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Blaque Baux Block strategy building-block",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "tag",
+    "asset_class",
+    "family",
+    "parties",
+    "legs",
+    "parameters",
+    "payoff",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "stable snake_case key"
+    },
+    "name": {
+      "type": "string"
+    },
+    "tag": {
+      "type": "string",
+      "description": "deck abbreviation"
+    },
+    "asset_class": {
+      "enum": [
+        "rates",
+        "fx",
+        "equity",
+        "credit",
+        "commodity",
+        "municipal",
+        "funding"
+      ]
+    },
+    "family": {
+      "type": "string",
+      "description": "swap|forward|option|variance|barrier|swaption|..."
+    },
+    "parties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "legs": {
+      "type": "array",
+      "description": "cash-flow legs [from,to,flow]",
+      "items": {
+        "type": "array"
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "settlement": {
+      "type": "string"
+    },
+    "payoff": {
+      "type": "string"
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "combinations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "documented hedging/arb/combination plays"
+    },
+    "use": {
+      "type": "string"
+    },
+    "deck_slide": {
+      "type": "integer"
+    },
+    "detail_level": {
+      "enum": [
+        "full",
+        "diagram"
+      ]
+    },
+    "status": {
+      "enum": [
+        "reference",
+        "spec",
+        "implemented",
+        "validated"
+      ]
+    }
+  }
+}

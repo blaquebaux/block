@@ -1,0 +1,3303 @@
+{
+  "_meta": {
+    "title": "Blaque Baux \u2014 Block Derivatives Catalog",
+    "source": "Derivatives Master Reference (Kareem Williams / Carter Warrens, Blaque Baux initiative)",
+    "generated": "2026-08-12",
+    "count": 80,
+    "status": "reference taxonomy \u2014 no pricing code yet; the backbone Block hangs off",
+    "note": "Each entry is a BUILDING BLOCK, not a standalone strategy. Value is in composition (hedging / arbitrage / combination) and in the engine's governance \u2014 none is alpha alone."
+  },
+  "asset_classes": {
+    "rates": "Interest-rate & cross-currency derivatives",
+    "fx": "Foreign-exchange derivatives (deliverable, onshore, and non-deliverable)",
+    "equity": "Equity derivatives (forwards, structured notes, options, variance/vol)",
+    "credit": "Credit derivatives (CDS, index, options, TRS)",
+    "commodity": "Commodity derivatives",
+    "municipal": "Municipal / MMD derivatives",
+    "funding": "Funding, deposit & cost-of-funds instruments"
+  },
+  "strategies": [
+    {
+      "id": "fra",
+      "name": "Forward Rate Agreement",
+      "tag": "FRA",
+      "family": "forward-rate",
+      "parties": [
+        "Buyer (long / future borrower)",
+        "Seller (short / future lender)"
+      ],
+      "legs": [
+        [
+          "Seller",
+          "Buyer",
+          "pays PV of (R_actual - R_fixed) if rates rose"
+        ],
+        [
+          "Buyer",
+          "Seller",
+          "pays if rates fell"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "R_fixed",
+        "R_actual (SOFR/EURIBOR)",
+        "trade/effective/fixing/settlement dates"
+      ],
+      "settlement": "cash, PV-discounted, at settlement (usually effective date)",
+      "payoff": "settlement = notional * (R_actual - R_fixed) * daycount, discounted to PV",
+      "variants": [
+        "chained FRAs ~ a swap"
+      ],
+      "combinations": [
+        "strip of FRAs replicates IRS",
+        "hedge a single future funding period"
+      ],
+      "use": "lock a single future borrowing/lending rate",
+      "deck_slide": 2,
+      "detail_level": "full",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_vanilla",
+      "name": "Interest Rate Swap",
+      "tag": "IRS",
+      "family": "swap",
+      "parties": [
+        "Fixed-Rate Payer (A)",
+        "Floating-Rate Payer (B)"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "pays fixed rate"
+        ],
+        [
+          "B",
+          "A",
+          "pays floating (SOFR/SONIA/\u20acSTR)"
+        ]
+      ],
+      "parameters": [
+        "notional_principal",
+        "fixed(swap) rate",
+        "floating reference",
+        "tenor",
+        "payment frequency",
+        "fixing date"
+      ],
+      "settlement": "net cash each payment date; principal never exchanged",
+      "payoff": "net = (fixed - floating) * notional * daycount",
+      "variants": [
+        "average",
+        "callable",
+        "arrears",
+        "OIS",
+        "zero-coupon",
+        "onshore"
+      ],
+      "combinations": [
+        "swap-spread vs treasury",
+        "swaption to enter",
+        "collar via cap/floor"
+      ],
+      "use": "core rate hedge/speculation building block",
+      "deck_slide": 3,
+      "detail_level": "full",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_average",
+      "name": "Average Rate Swap",
+      "tag": "IRS Average",
+      "family": "swap",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays fixed rate"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays average floating rate over period"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "fixed rate",
+        "floating avg reference",
+        "averaging window"
+      ],
+      "settlement": "net cash",
+      "payoff": "float leg = period-average of the reference",
+      "variants": [
+        "vs vanilla point-fixing"
+      ],
+      "combinations": [
+        "smooths fixing risk"
+      ],
+      "use": "hedge average exposure over a period",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_swap_spread",
+      "name": "Swap Spread (BGS)",
+      "tag": "IRS BGS",
+      "family": "spread",
+      "parties": [
+        "Swap-Spread Payer",
+        "Swap-Spread Receiver"
+      ],
+      "legs": [
+        [
+          "Payer",
+          "Receiver",
+          "pays IRS rate + spread"
+        ],
+        [
+          "Receiver",
+          "Payer",
+          "pays Treasury rate"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "IRS rate",
+        "spread",
+        "treasury reference"
+      ],
+      "settlement": "net cash",
+      "payoff": "isolates the swap-spread (IRS - govt)",
+      "variants": [
+        "cross-currency swap spread (Xccy BGS)"
+      ],
+      "combinations": [
+        "trade swap vs govt basis",
+        "hedge asset-swap spread"
+      ],
+      "use": "trade/hedge the swap-vs-treasury basis",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_callable",
+      "name": "Callable Swap",
+      "tag": "IRS Callable",
+      "family": "swap+option",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays fixed"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays floating"
+        ],
+        [
+          "Fixed",
+          "-",
+          "right to terminate early"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "fixed rate",
+        "call schedule"
+      ],
+      "settlement": "net cash + optional early termination",
+      "payoff": "IRS + embedded call (Bermudan cancellation)",
+      "variants": [
+        "cancellable swap"
+      ],
+      "combinations": [
+        "= IRS + receiver swaption"
+      ],
+      "use": "swap with the right to exit early",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_arrears",
+      "name": "Swap in Arrears",
+      "tag": "IRS in arrears",
+      "family": "swap",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays fixed"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays floating set in arrears"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "fixed rate",
+        "arrears fixing"
+      ],
+      "settlement": "net cash",
+      "payoff": "floating fixed at END of period (arrears) not start",
+      "variants": [
+        "vs vanilla (in advance)"
+      ],
+      "combinations": [
+        "convexity vs vanilla swap"
+      ],
+      "use": "express a view on the forward-rate convexity",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_ois",
+      "name": "OIS Swap",
+      "tag": "IRS OIS",
+      "family": "swap",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays fixed"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays compounded overnight rate"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "fixed rate",
+        "overnight index (SOFR/\u20acSTR/SONIA)"
+      ],
+      "settlement": "net cash at maturity/periodic",
+      "payoff": "float = compounded O/N over period",
+      "variants": [
+        "onshore OIS"
+      ],
+      "combinations": [
+        "discounting curve / basis vs term rates"
+      ],
+      "use": "hedge against the O/N funding curve",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_ois_onshore",
+      "name": "Onshore OIS Swap",
+      "tag": "IRS OIS Onshore",
+      "family": "swap",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays local-currency fixed"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays local O/N compounded"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "local fixed rate",
+        "local O/N index"
+      ],
+      "settlement": "net cash in local currency",
+      "payoff": "OIS in a restricted/onshore market",
+      "variants": [
+        "OIS (deliverable)"
+      ],
+      "combinations": [
+        "EM local-rates hedge"
+      ],
+      "use": "onshore/local-market OIS",
+      "deck_slide": 17,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "treasury_lock",
+      "name": "Treasury Lock",
+      "tag": "Treasury Lock",
+      "family": "forward",
+      "parties": [
+        "Lock Buyer",
+        "Lock Seller"
+      ],
+      "legs": [
+        [
+          "Buyer/Seller",
+          "-",
+          "pays based on future Treasury price/yield"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "reference treasury",
+        "lock date"
+      ],
+      "settlement": "cash",
+      "payoff": "locks a future govt-bond yield for issuance",
+      "variants": [
+        "rate lock",
+        "MMD rate lock"
+      ],
+      "combinations": [
+        "pre-hedge a bond issuance",
+        "vs forward-starting swap"
+      ],
+      "use": "lock a future govt funding level",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_zero_coupon",
+      "name": "Zero Coupon Swap",
+      "tag": "IRS ZC",
+      "family": "swap",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays fixed lump sum at maturity"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays floating periodically"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "fixed lump",
+        "floating reference"
+      ],
+      "settlement": "one fixed bullet vs periodic floating",
+      "payoff": "fixed side is a single maturity payment",
+      "variants": [
+        "accreting notional"
+      ],
+      "combinations": [
+        "match a zero-coupon liability"
+      ],
+      "use": "swap a bullet fixed vs periodic floating",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_onshore",
+      "name": "Onshore IRS",
+      "tag": "IRS Onshore",
+      "family": "swap",
+      "parties": [
+        "Fixed Payer",
+        "Floating Payer"
+      ],
+      "legs": [
+        [
+          "Fixed",
+          "Float",
+          "pays local-currency fixed"
+        ],
+        [
+          "Float",
+          "Fixed",
+          "pays local-currency floating"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "local fixed/floating"
+      ],
+      "settlement": "net cash local currency",
+      "payoff": "vanilla IRS in a restricted market",
+      "variants": [
+        "IRS (deliverable)"
+      ],
+      "combinations": [
+        "EM local-rates hedge"
+      ],
+      "use": "onshore/local-market IRS",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "cap_floor",
+      "name": "Cap / Floor",
+      "tag": "Cap/Floor",
+      "family": "option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays if reference > cap strike (or < floor strike)"
+        ]
+      ],
+      "parameters": [
+        "notional",
+        "cap/floor strike",
+        "reference",
+        "tenor"
+      ],
+      "settlement": "cash on each breach",
+      "payoff": "strip of caplets/floorlets on the reference rate",
+      "variants": [
+        "collar",
+        "straddle",
+        "spread"
+      ],
+      "combinations": [
+        "cap a floating liability",
+        "collar to cheapen"
+      ],
+      "use": "bound floating-rate exposure",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "collar",
+      "name": "Collar",
+      "tag": "Collar",
+      "family": "option-combo",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "-",
+          "long cap + short floor (premium often ~0)"
+        ]
+      ],
+      "parameters": [
+        "cap strike",
+        "floor strike",
+        "notional"
+      ],
+      "settlement": "cash on breach of either bound",
+      "payoff": "long cap financed by short floor",
+      "variants": [
+        "zero-cost collar"
+      ],
+      "combinations": [
+        "cheapen a cap by giving up downside"
+      ],
+      "use": "bound rates at low/zero premium",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "cap_floor_straddle",
+      "name": "Cap/Floor Straddle",
+      "tag": "Cap/Floor Straddle",
+      "family": "option-combo",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "-",
+          "long cap + long floor, same strike & dates"
+        ]
+      ],
+      "parameters": [
+        "strike",
+        "notional",
+        "dates"
+      ],
+      "settlement": "cash on any large rate move",
+      "payoff": "long rate-vol both directions",
+      "variants": [
+        "strangle (different strikes)"
+      ],
+      "combinations": [
+        "harvest/pay rate volatility"
+      ],
+      "use": "long interest-rate volatility",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "cap_floor_spread",
+      "name": "Cap/Floor Spread",
+      "tag": "Cap/Floor Spread",
+      "family": "option-combo",
+      "parties": [
+        "Investor",
+        "Counterparty"
+      ],
+      "legs": [
+        [
+          "Investor",
+          "-",
+          "long cap at strike1 + short cap at strike2"
+        ]
+      ],
+      "parameters": [
+        "strike1",
+        "strike2",
+        "notional"
+      ],
+      "settlement": "cash within the strike band",
+      "payoff": "capped payoff between two strikes",
+      "variants": [
+        "put/call spread analog"
+      ],
+      "combinations": [
+        "cheapen directional rate view"
+      ],
+      "use": "bounded directional rate view",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "irs_swaption",
+      "name": "Swaption",
+      "tag": "IRS Cap Floor",
+      "family": "swaption",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "grants right to enter an IRS"
+        ]
+      ],
+      "parameters": [
+        "strike (swap rate)",
+        "expiry",
+        "underlying swap tenor",
+        "payer/receiver"
+      ],
+      "settlement": "physical or cash-settled swap",
+      "payoff": "option to enter a swap",
+      "variants": [
+        "European",
+        "Bermudan",
+        "straddle"
+      ],
+      "combinations": [
+        "callable/cancellable swaps",
+        "hedge issuance optionality"
+      ],
+      "use": "optionality on entering a swap",
+      "deck_slide": 15,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "swaption_european",
+      "name": "European Swaption",
+      "tag": "European Swaption",
+      "family": "swaption",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "right to enter IRS on ONE fixed date"
+        ]
+      ],
+      "parameters": [
+        "strike",
+        "single expiry",
+        "swap tenor"
+      ],
+      "settlement": "swap on exercise",
+      "payoff": "single-date exercise",
+      "variants": [
+        "Bermudan",
+        "straddle"
+      ],
+      "combinations": [
+        "cleanest swap optionality"
+      ],
+      "use": "one-date option to enter a swap",
+      "deck_slide": 17,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "swaption_bermudan",
+      "name": "Bermudan Swaption",
+      "tag": "Bermudan Swaption",
+      "family": "swaption",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "right to enter IRS on MULTIPLE fixed dates"
+        ]
+      ],
+      "parameters": [
+        "strike",
+        "exercise dates",
+        "swap tenor"
+      ],
+      "settlement": "swap on exercise",
+      "payoff": "multi-date exercise",
+      "variants": [
+        "European",
+        "callable-swap equiv"
+      ],
+      "combinations": [
+        "prices callable/cancellable swaps"
+      ],
+      "use": "multi-date swap optionality",
+      "deck_slide": 17,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "swaption_straddle",
+      "name": "Straddle Swaption",
+      "tag": "Straddle Swaption",
+      "family": "swaption",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "right to enter IRS as fixed payer OR receiver"
+        ]
+      ],
+      "parameters": [
+        "strike",
+        "expiry",
+        "swap tenor"
+      ],
+      "settlement": "swap on exercise",
+      "payoff": "direction-agnostic swaption",
+      "variants": [
+        "payer/receiver swaptions"
+      ],
+      "combinations": [
+        "long swap-rate volatility"
+      ],
+      "use": "long rate-vol via swaptions",
+      "deck_slide": 17,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "xccy_mtm",
+      "name": "Mark-to-Market Cross-Currency Swap",
+      "tag": "Xccy MTM",
+      "family": "xccy-swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "Currency A leg + MTM reset"
+        ],
+        [
+          "B",
+          "A",
+          "Currency B leg + MTM reset"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "two rate legs",
+        "MTM reset frequency",
+        "notionals"
+      ],
+      "settlement": "net cash + periodic notional MTM reset",
+      "payoff": "xccy swap with FX notional resets",
+      "variants": [
+        "non-MTM",
+        "onshore",
+        "non-deliverable"
+      ],
+      "combinations": [
+        "fund in another currency",
+        "basis (xccy) trading"
+      ],
+      "use": "cross-currency funding with FX resets",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "xccy_non_mtm",
+      "name": "Non-MTM Cross-Currency Swap",
+      "tag": "Xccy non MTM",
+      "family": "xccy-swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "Currency A fixed rate"
+        ],
+        [
+          "B",
+          "A",
+          "Currency B fixed rate"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "two fixed legs",
+        "notionals"
+      ],
+      "settlement": "net cash; fixed notionals",
+      "payoff": "xccy swap, no FX resets",
+      "variants": [
+        "MTM",
+        "onshore"
+      ],
+      "combinations": [
+        "fixed-notional xccy funding"
+      ],
+      "use": "cross-currency funding, fixed notional",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "xccy_swap_spread",
+      "name": "Cross-Currency Swap Spread (BGS)",
+      "tag": "Xccy Swap BGS",
+      "family": "xccy-spread",
+      "parties": [
+        "Spread Payer",
+        "Spread Receiver"
+      ],
+      "legs": [
+        [
+          "Payer",
+          "Receiver",
+          "pays XCCY rate + spread"
+        ],
+        [
+          "Receiver",
+          "Payer",
+          "pays local IRS rate"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "xccy rate",
+        "spread",
+        "local IRS"
+      ],
+      "settlement": "net cash",
+      "payoff": "isolates the cross-currency basis",
+      "variants": [
+        "swap spread (single ccy)"
+      ],
+      "combinations": [
+        "trade the xccy basis"
+      ],
+      "use": "trade/hedge the cross-currency basis",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "xccy_non_mtm_onshore",
+      "name": "Onshore Non-MTM Cross-Currency Swap",
+      "tag": "Xccy non MTM Onshore",
+      "family": "xccy-swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "Local currency A fixed rate"
+        ],
+        [
+          "B",
+          "A",
+          "Local currency B fixed rate"
+        ]
+      ],
+      "parameters": [
+        "ccy pair (restricted)",
+        "fixed legs"
+      ],
+      "settlement": "net cash local",
+      "payoff": "onshore xccy swap, fixed notional",
+      "variants": [
+        "non-MTM (deliverable)"
+      ],
+      "combinations": [
+        "EM cross-border funding"
+      ],
+      "use": "onshore cross-currency funding",
+      "deck_slide": 16,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "xccy_nd",
+      "name": "Non-Deliverable Cross-Currency Swap",
+      "tag": "Xccy ND",
+      "family": "xccy-swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "USD floating"
+        ],
+        [
+          "B",
+          "A",
+          "NDF fixing vs strike, settled in USD"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "USD leg",
+        "NDF fixings"
+      ],
+      "settlement": "USD cash-settled",
+      "payoff": "xccy swap on a non-deliverable currency",
+      "variants": [
+        "deliverable xccy"
+      ],
+      "combinations": [
+        "EM rates without local access"
+      ],
+      "use": "cross-currency swap on restricted FX",
+      "deck_slide": 17,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "rates"
+    },
+    {
+      "id": "fx_spot",
+      "name": "Spot Transaction",
+      "tag": "Spot",
+      "family": "spot",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays Currency A (spot date)"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "delivers Currency B (spot date)"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "spot rate",
+        "spot date (T+2)"
+      ],
+      "settlement": "physical delivery at spot",
+      "payoff": "exchange at spot",
+      "variants": [
+        "onshore"
+      ],
+      "combinations": [
+        "leg of an FX swap"
+      ],
+      "use": "immediate currency exchange",
+      "deck_slide": 11,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_spot_onshore",
+      "name": "Spot Transaction Onshore",
+      "tag": "Spot Onshore",
+      "family": "spot",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "local currency T+1/T+2"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "delivers FX T+1/T+2"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "spot",
+        "T+1/T+2"
+      ],
+      "settlement": "onshore delivery",
+      "payoff": "onshore spot",
+      "variants": [
+        "spot (offshore)"
+      ],
+      "combinations": [
+        "EM access"
+      ],
+      "use": "onshore spot exchange",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_outright_forward",
+      "name": "Outright Forward",
+      "tag": "Outright",
+      "family": "forward",
+      "parties": [
+        "Long Party",
+        "Short Party"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Short",
+          "pays agreed forward price"
+        ],
+        [
+          "Short",
+          "Long",
+          "delivers underlying asset"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "forward rate",
+        "value date"
+      ],
+      "settlement": "physical/cash at forward date",
+      "payoff": "locked future FX rate",
+      "variants": [
+        "onshore",
+        "average-rate",
+        "target",
+        "accumulator",
+        "NDF"
+      ],
+      "combinations": [
+        "hedge future FX exposure"
+      ],
+      "use": "lock a future FX rate",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_outright_onshore",
+      "name": "Outright Forward Onshore",
+      "tag": "Outright Onshore",
+      "family": "forward",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "local currency, agreed future date"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "delivers FX, agreed future date"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "forward rate",
+        "future date"
+      ],
+      "settlement": "onshore delivery",
+      "payoff": "onshore forward",
+      "variants": [
+        "outright (offshore)",
+        "NDF"
+      ],
+      "combinations": [
+        "EM FX hedge"
+      ],
+      "use": "onshore forward FX",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_avg_rate_forward",
+      "name": "Average Rate Forward",
+      "tag": "Avg Rate Fwd FXD",
+      "family": "forward",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays average rate vs agreed forward rate"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "averaging window",
+        "forward rate"
+      ],
+      "settlement": "cash on the average",
+      "payoff": "settles on period-average FX",
+      "variants": [
+        "average-rate option (Asian)"
+      ],
+      "combinations": [
+        "hedge recurring FX flows"
+      ],
+      "use": "hedge an average FX exposure",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_target_forward",
+      "name": "Target Forward",
+      "tag": "Target Forward FXD",
+      "family": "structured-forward",
+      "parties": [
+        "Client",
+        "Bank"
+      ],
+      "legs": [
+        [
+          "Client",
+          "Bank",
+          "FX at better rate if spot stays in range"
+        ],
+        [
+          "Bank",
+          "Client",
+          "FX at worse rate if spot breaks barrier"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "target/range",
+        "barrier",
+        "knock conditions"
+      ],
+      "settlement": "periodic settlement",
+      "payoff": "enhanced rate with a barrier give-up",
+      "variants": [
+        "accumulator",
+        "pivot"
+      ],
+      "combinations": [
+        "cheapen a forward, take barrier risk"
+      ],
+      "use": "enhanced forward with barrier risk",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_forward_accumulator",
+      "name": "Forward Accumulator",
+      "tag": "Fwd Accumulator FXD",
+      "family": "structured-forward",
+      "parties": [
+        "Client",
+        "Bank"
+      ],
+      "legs": [
+        [
+          "Client",
+          "Bank",
+          "buys FX daily when spot is below barrier"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "accumulation level",
+        "barrier",
+        "schedule"
+      ],
+      "settlement": "daily accumulation",
+      "payoff": "accumulate FX at a favorable level with knock-out",
+      "variants": [
+        "target forward",
+        "decumulator"
+      ],
+      "combinations": [
+        "accumulate a position cheaply, barrier risk"
+      ],
+      "use": "scheduled accumulation with barrier",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_swap",
+      "name": "FX Swap",
+      "tag": "FX Swap",
+      "family": "swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "Currency A spot then forward date"
+        ],
+        [
+          "B",
+          "A",
+          "Currency B spot then forward date"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "near/far legs",
+        "two value dates"
+      ],
+      "settlement": "two-legged exchange (spot + forward)",
+      "payoff": "spot vs forward exchange (funding/roll)",
+      "variants": [
+        "onshore",
+        "NDF FX swap"
+      ],
+      "combinations": [
+        "roll an FX hedge",
+        "fund one ccy with another"
+      ],
+      "use": "swap currencies spot-vs-forward",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_swap_onshore",
+      "name": "FX Swap Onshore",
+      "tag": "FX Swap Onshore",
+      "family": "swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "local currency near leg / far leg"
+        ],
+        [
+          "B",
+          "A",
+          "FX near leg / far leg"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "near/far"
+      ],
+      "settlement": "onshore two-legged",
+      "payoff": "onshore FX swap",
+      "variants": [
+        "FX swap (offshore)",
+        "NDF FX swap"
+      ],
+      "combinations": [
+        "EM funding/roll"
+      ],
+      "use": "onshore FX swap",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_time_option",
+      "name": "Time Option (Optional Delivery Forward)",
+      "tag": "Time Option",
+      "family": "forward+option",
+      "parties": [
+        "Holder",
+        "Writer"
+      ],
+      "legs": [
+        [
+          "Holder",
+          "Writer",
+          "chooses delivery date within window"
+        ],
+        [
+          "Writer",
+          "Holder",
+          "delivers FX on selected date"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "forward rate",
+        "delivery window"
+      ],
+      "settlement": "physical on chosen date",
+      "payoff": "forward with flexible delivery date",
+      "variants": [
+        "window forward"
+      ],
+      "combinations": [
+        "uncertain settlement timing hedge"
+      ],
+      "use": "forward with delivery-date optionality",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_risk_reversal",
+      "name": "Risk Reversal",
+      "tag": "Risk Rev FXD",
+      "family": "option-combo",
+      "parties": [
+        "Investor",
+        "Counterparty"
+      ],
+      "legs": [
+        [
+          "Investor",
+          "-",
+          "long call + short put (or vice versa)"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "call/put strikes",
+        "expiry"
+      ],
+      "settlement": "cash/physical on exercise",
+      "payoff": "directional option combo (skew trade)",
+      "variants": [
+        "collar",
+        "seagull"
+      ],
+      "combinations": [
+        "trade FX skew",
+        "cheapen directional hedge"
+      ],
+      "use": "directional FX view / skew",
+      "deck_slide": 11,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_straddle",
+      "name": "Straddle",
+      "tag": "Straddle FXD",
+      "family": "option-combo",
+      "parties": [
+        "Investor",
+        "Counterparty"
+      ],
+      "legs": [
+        [
+          "Investor",
+          "-",
+          "long call + long put, same strike & expiry"
+        ]
+      ],
+      "parameters": [
+        "strike",
+        "expiry"
+      ],
+      "settlement": "cash on any large move",
+      "payoff": "long FX volatility",
+      "variants": [
+        "strangle"
+      ],
+      "combinations": [
+        "harvest/pay FX vol"
+      ],
+      "use": "long FX volatility",
+      "deck_slide": 11,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_strangle",
+      "name": "Strangle",
+      "tag": "Strangle FXD",
+      "family": "option-combo",
+      "parties": [
+        "Investor",
+        "Counterparty"
+      ],
+      "legs": [
+        [
+          "Investor",
+          "-",
+          "long OTM call + long OTM put"
+        ]
+      ],
+      "parameters": [
+        "OTM strikes",
+        "expiry"
+      ],
+      "settlement": "cash on a large move",
+      "payoff": "cheaper long-vol than straddle",
+      "variants": [
+        "straddle"
+      ],
+      "combinations": [
+        "long FX vol, wider break-evens"
+      ],
+      "use": "long FX volatility (OTM)",
+      "deck_slide": 11,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_one_touch",
+      "name": "One-Touch / No-Touch",
+      "tag": "Touch FXD",
+      "family": "binary-barrier",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays fixed amount if spot touches / does NOT touch barrier"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "barrier",
+        "payout",
+        "expiry"
+      ],
+      "settlement": "fixed cash if barrier condition met",
+      "payoff": "binary on touching a barrier",
+      "variants": [
+        "digital",
+        "double-no-touch"
+      ],
+      "combinations": [
+        "express a range/breakout view"
+      ],
+      "use": "binary barrier bet",
+      "deck_slide": 11,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_simple_barrier",
+      "name": "Simple Barrier Option",
+      "tag": "Simple Barrier FXD",
+      "family": "barrier-option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays out if barrier condition is met"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "strike",
+        "barrier (KI/KO)",
+        "expiry"
+      ],
+      "settlement": "cash/physical if active",
+      "payoff": "knock-in/knock-out vanilla",
+      "variants": [
+        "double barrier",
+        "digital"
+      ],
+      "combinations": [
+        "cheapen a vanilla with a barrier"
+      ],
+      "use": "barrier-conditioned option",
+      "deck_slide": 11,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_double_barrier",
+      "name": "Double Barrier Option",
+      "tag": "Double Barrier FXD",
+      "family": "barrier-option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays out if EITHER barrier is triggered"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "two barriers",
+        "strike",
+        "expiry"
+      ],
+      "settlement": "cash if triggered",
+      "payoff": "two-barrier structure",
+      "variants": [
+        "single barrier",
+        "double-no-touch"
+      ],
+      "combinations": [
+        "range/breakout structuring"
+      ],
+      "use": "two-barrier option",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_avg_rate_option",
+      "name": "Average Rate Option (Asian)",
+      "tag": "Asian FXD",
+      "family": "asian-option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays based on average rate vs strike"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "averaging window",
+        "strike",
+        "expiry"
+      ],
+      "settlement": "cash on the average",
+      "payoff": "payoff on period-average FX",
+      "variants": [
+        "average-rate forward"
+      ],
+      "combinations": [
+        "hedge recurring flows, cheaper vol"
+      ],
+      "use": "option on average FX",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_digital",
+      "name": "Digital Option",
+      "tag": "Digital Option FXD",
+      "family": "binary",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays fixed amount if spot is in/out-of-the-money"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "strike",
+        "payout",
+        "expiry"
+      ],
+      "settlement": "fixed cash if ITM",
+      "payoff": "all-or-nothing at a strike",
+      "variants": [
+        "one-touch",
+        "range digital"
+      ],
+      "combinations": [
+        "express a precise level view"
+      ],
+      "use": "binary at a strike",
+      "deck_slide": 12,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_vanilla",
+      "name": "Vanilla Option",
+      "tag": "Vanilla Option FXD",
+      "family": "option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays intrinsic value if exercised"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "strike",
+        "expiry",
+        "call/put"
+      ],
+      "settlement": "cash/physical on exercise",
+      "payoff": "standard FX call/put",
+      "variants": [
+        "quanto",
+        "non-deliverable",
+        "barrier",
+        "digital"
+      ],
+      "combinations": [
+        "building block for combos/hedges"
+      ],
+      "use": "standard FX option",
+      "deck_slide": 13,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_quanto",
+      "name": "Quanto Option",
+      "tag": "Quanto Option FXD",
+      "family": "option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays in DOMESTIC currency based on FX move"
+        ]
+      ],
+      "parameters": [
+        "ccy pair",
+        "strike",
+        "fixed FX conversion",
+        "expiry"
+      ],
+      "settlement": "cash in domestic ccy",
+      "payoff": "payoff in domestic ccy at a fixed rate",
+      "variants": [
+        "vanilla",
+        "composite"
+      ],
+      "combinations": [
+        "remove FX translation risk"
+      ],
+      "use": "FX-payoff paid in domestic ccy",
+      "deck_slide": 13,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_nd_option",
+      "name": "Non-Deliverable Option",
+      "tag": "ND Option FXD",
+      "family": "option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "cash settles difference in NDF rate vs strike"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "strike",
+        "NDF fixing",
+        "expiry"
+      ],
+      "settlement": "cash-settled (usually USD)",
+      "payoff": "option on a non-deliverable currency",
+      "variants": [
+        "onshore ND option",
+        "vanilla"
+      ],
+      "combinations": [
+        "EM FX optionality w/o access"
+      ],
+      "use": "option on restricted FX",
+      "deck_slide": 13,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "fx_nd_option_onshore",
+      "name": "Non-Deliverable Option Onshore",
+      "tag": "ND Opt FXD Onshore",
+      "family": "option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "cash settles in local currency"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "strike",
+        "local fixing"
+      ],
+      "settlement": "cash-settled local",
+      "payoff": "onshore ND option",
+      "variants": [
+        "ND option (offshore)"
+      ],
+      "combinations": [
+        "onshore EM optionality"
+      ],
+      "use": "onshore restricted-FX option",
+      "deck_slide": 13,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "ndf",
+      "name": "Non-Deliverable Forward",
+      "tag": "NDF",
+      "family": "forward",
+      "parties": [
+        "Long Party",
+        "Short Party"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Short",
+          "pays notional * agreed NDF rate"
+        ],
+        [
+          "Short",
+          "Long",
+          "pays notional * settlement (fixing) rate"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "NDF rate",
+        "fixing",
+        "notional"
+      ],
+      "settlement": "net cash (usually USD)",
+      "payoff": "cash-settled forward on restricted FX",
+      "variants": [
+        "onshore",
+        "NDF swap"
+      ],
+      "combinations": [
+        "EM FX hedge without delivery"
+      ],
+      "use": "cash-settled EM forward",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "ndf_onshore",
+      "name": "Non-Deliverable Forward Onshore",
+      "tag": "NDF Onshore",
+      "family": "forward",
+      "parties": [
+        "Long Party",
+        "Short Party"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Short",
+          "local currency at agreed NDF rate"
+        ],
+        [
+          "Short",
+          "Long",
+          "local currency at settlement rate"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "NDF rate",
+        "local fixing"
+      ],
+      "settlement": "cash local",
+      "payoff": "onshore NDF",
+      "variants": [
+        "NDF (offshore)"
+      ],
+      "combinations": [
+        "onshore EM hedge"
+      ],
+      "use": "onshore cash-settled forward",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "ndf_fx_swap",
+      "name": "NDF FX Swap",
+      "tag": "NDF FX Swap",
+      "family": "swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "NDF near leg"
+        ],
+        [
+          "B",
+          "A",
+          "NDF far leg"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "near/far NDF"
+      ],
+      "settlement": "net cash",
+      "payoff": "cash-settled FX swap on restricted FX",
+      "variants": [
+        "onshore NDF swap",
+        "FX swap"
+      ],
+      "combinations": [
+        "roll an NDF hedge"
+      ],
+      "use": "non-deliverable FX swap",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "ndf_fx_swap_onshore",
+      "name": "NDF FX Swap Onshore",
+      "tag": "NDF FX Swap Onshore",
+      "family": "swap",
+      "parties": [
+        "Party A",
+        "Party B"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "local currency NDF near leg"
+        ],
+        [
+          "B",
+          "A",
+          "local currency NDF far leg"
+        ]
+      ],
+      "parameters": [
+        "restricted ccy",
+        "near/far"
+      ],
+      "settlement": "cash local",
+      "payoff": "onshore NDF swap",
+      "variants": [
+        "NDF swap (offshore)"
+      ],
+      "combinations": [
+        "onshore roll"
+      ],
+      "use": "onshore non-deliverable FX swap",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "fx"
+    },
+    {
+      "id": "eqd_autocall",
+      "name": "Autocallable Equity Note",
+      "tag": "Autocall EQD",
+      "family": "structured-note",
+      "parties": [
+        "Investor",
+        "Issuer"
+      ],
+      "legs": [
+        [
+          "Investor",
+          "Issuer",
+          "pays notional"
+        ],
+        [
+          "Issuer",
+          "Investor",
+          "coupons if reference at/above barrier"
+        ],
+        [
+          "Issuer",
+          "Investor",
+          "if auto-called: notional + final coupon"
+        ],
+        [
+          "Issuer",
+          "Investor",
+          "at maturity: worst of performance or notional"
+        ]
+      ],
+      "parameters": [
+        "reference (single/basket)",
+        "coupon barrier",
+        "autocall barrier",
+        "protection barrier",
+        "tenor"
+      ],
+      "settlement": "coupons + principal per barrier logic",
+      "payoff": "conditional coupons w/ early redemption + downside barrier",
+      "variants": [
+        "snowball",
+        "phoenix",
+        "worst-of basket"
+      ],
+      "combinations": [
+        "yield enhancement vs owning the stock",
+        "hedge issuer vol book"
+      ],
+      "use": "conditional-coupon yield note",
+      "deck_slide": 8,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_forward",
+      "name": "Equity Forward",
+      "tag": "Forward EQD",
+      "family": "forward",
+      "parties": [
+        "Long Party",
+        "Short Party"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Short",
+          "pays agreed forward price"
+        ],
+        [
+          "Short",
+          "Long",
+          "delivers underlying shares or cash equivalent"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "forward price",
+        "value date"
+      ],
+      "settlement": "physical/cash at forward",
+      "payoff": "locked future equity price",
+      "variants": [
+        "amortizing-strike",
+        "accreting-strike"
+      ],
+      "combinations": [
+        "synthetic long/short",
+        "hedge a future equity flow"
+      ],
+      "use": "lock a future equity price",
+      "deck_slide": 8,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_trs",
+      "name": "Total Return Swap (Equity)",
+      "tag": "TRS EQD",
+      "family": "swap",
+      "parties": [
+        "Total Return Payer",
+        "Total Return Receiver"
+      ],
+      "legs": [
+        [
+          "Payer (e.g. hedge fund)",
+          "Receiver",
+          "pays floating (SOFR+spread)"
+        ],
+        [
+          "Receiver (e.g. investor)",
+          "Payer",
+          "pays total return of equity/index"
+        ]
+      ],
+      "parameters": [
+        "underlying/index",
+        "financing spread",
+        "notional",
+        "reset frequency"
+      ],
+      "settlement": "net cash",
+      "payoff": "synthetic financed equity exposure",
+      "variants": [
+        "commodity TRS",
+        "municipal TRS",
+        "index TRS"
+      ],
+      "combinations": [
+        "gain exposure without ownership",
+        "balance-sheet/financing plays"
+      ],
+      "use": "financed synthetic equity return",
+      "deck_slide": 8,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_amort_strike_fwd",
+      "name": "Amortizing Strike Forward",
+      "tag": "Amort Strike Fwd EQD",
+      "family": "forward",
+      "parties": [
+        "Long Party",
+        "Short Party"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Short",
+          "pays pre-determined amortizing strike price"
+        ],
+        [
+          "Short",
+          "Long",
+          "delivers underlying shares"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "amortization schedule",
+        "value date"
+      ],
+      "settlement": "physical/cash",
+      "payoff": "forward with a declining strike schedule",
+      "variants": [
+        "accreting-strike"
+      ],
+      "combinations": [
+        "structured buyback/hedge"
+      ],
+      "use": "forward w/ amortizing strike",
+      "deck_slide": 8,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_asian",
+      "name": "Asian Option (Equity)",
+      "tag": "Asian Option EQD",
+      "family": "asian-option",
+      "parties": [
+        "Option Buyer",
+        "Option Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays based on difference between average price & strike"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "averaging window",
+        "strike",
+        "expiry"
+      ],
+      "settlement": "cash on the average",
+      "payoff": "payoff on average price",
+      "variants": [
+        "average-strike",
+        "average-rate"
+      ],
+      "combinations": [
+        "hedge average execution (VWAP-like)"
+      ],
+      "use": "option on average equity price",
+      "deck_slide": 8,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_asr",
+      "name": "Accelerated Share Repurchase",
+      "tag": "ASR EQD",
+      "family": "buyback",
+      "parties": [
+        "Corporation",
+        "Investor/Bank"
+      ],
+      "legs": [
+        [
+          "Corp",
+          "Bank",
+          "pays upfront for initial shares"
+        ],
+        [
+          "Bank",
+          "Corp",
+          "delivers initial share tranche"
+        ],
+        [
+          "Corp/Bank",
+          "-",
+          "final settlement based on average VWAP over the period"
+        ]
+      ],
+      "parameters": [
+        "buyback notional",
+        "VWAP window",
+        "discount"
+      ],
+      "settlement": "shares + VWAP true-up",
+      "payoff": "accelerated buyback vs VWAP",
+      "variants": [
+        "collared ASR",
+        "VWAP-minus"
+      ],
+      "combinations": [
+        "corporate buyback execution",
+        "bank hedges w/ borrow"
+      ],
+      "use": "accelerated buyback vs VWAP",
+      "deck_slide": 8,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_fwd_start_option",
+      "name": "Forward Start Option",
+      "tag": "Fwd Start Option EQD",
+      "family": "option",
+      "parties": [
+        "Option Buyer",
+        "Option Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "option strike set at-the-money on a future start date"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "start date",
+        "expiry"
+      ],
+      "settlement": "cash/physical on exercise",
+      "payoff": "strike set later, ATM at start",
+      "variants": [
+        "cliquet (series of forward-starts)"
+      ],
+      "combinations": [
+        "employee-option / deferred hedging"
+      ],
+      "use": "deferred-strike option",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_accr_strike_fwd",
+      "name": "Accreting Strike Forward",
+      "tag": "Accr Strike Fwd EQD",
+      "family": "forward",
+      "parties": [
+        "Long Party",
+        "Short Party"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Short",
+          "pays pre-determined accreting strike price"
+        ],
+        [
+          "Short",
+          "Long",
+          "delivers underlying shares"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "accretion schedule"
+      ],
+      "settlement": "physical/cash",
+      "payoff": "forward w/ rising strike schedule",
+      "variants": [
+        "amortizing-strike"
+      ],
+      "combinations": [
+        "structured financing/hedge"
+      ],
+      "use": "forward w/ accreting strike",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_cliquet",
+      "name": "Cliquet Option",
+      "tag": "Cliquet EQD",
+      "family": "option",
+      "parties": [
+        "Option Buyer",
+        "Option Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays sum of capped periodic returns"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "reset frequency",
+        "local/global caps & floors"
+      ],
+      "settlement": "cash on locked periodic returns",
+      "payoff": "ratchet of periodic forward-start options",
+      "variants": [
+        "reverse cliquet",
+        "napoleon"
+      ],
+      "combinations": [
+        "structured-note payoff",
+        "path-dependent vol view"
+      ],
+      "use": "ratcheting periodic-return option",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_var_contingent",
+      "name": "Variance Contingent Swap",
+      "tag": "Var Contingent EQD",
+      "family": "variance",
+      "parties": [
+        "Variance Buyer",
+        "Variance Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays fixed leg"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays realized variance IF barrier is breached"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "variance strike",
+        "barrier",
+        "window"
+      ],
+      "settlement": "cash conditional on barrier",
+      "payoff": "variance swap conditioned on a barrier",
+      "variants": [
+        "conditional-var",
+        "corridor-var"
+      ],
+      "combinations": [
+        "conditional vol exposure",
+        "cheaper than plain var swap"
+      ],
+      "use": "barrier-conditioned variance",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_volatility_swap",
+      "name": "Volatility Swap",
+      "tag": "Volatility EQD",
+      "family": "variance",
+      "parties": [
+        "Vol Buyer",
+        "Vol Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays fixed vol (notional * strike vol)"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays realized vol (notional * realized vol)"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "vol strike",
+        "vega notional",
+        "window"
+      ],
+      "settlement": "cash on realized vol",
+      "payoff": "pure exposure to realized volatility",
+      "variants": [
+        "variance swap (convex)"
+      ],
+      "combinations": [
+        "trade vol without options delta"
+      ],
+      "use": "trade realized volatility",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_variance_swap",
+      "name": "Variance Swap",
+      "tag": "Variance Swap EQD",
+      "family": "variance",
+      "parties": [
+        "Variance Buyer",
+        "Variance Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays fixed variance (notional * strike var)"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays realized variance (notional * realized var)"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "variance strike",
+        "var notional",
+        "window"
+      ],
+      "settlement": "cash on realized variance",
+      "payoff": "convex exposure to realized variance",
+      "variants": [
+        "vol swap (linear)",
+        "conditional/corridor var"
+      ],
+      "combinations": [
+        "harvest variance-risk premium",
+        "convexity vs vol swap"
+      ],
+      "use": "trade realized variance (convex)",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_conditional_var",
+      "name": "Conditional Variance Swap",
+      "tag": "Cond Var Swap EQD",
+      "family": "variance",
+      "parties": [
+        "Variance Buyer",
+        "Variance Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays fixed variance"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays realized variance ONLY if option expires ITM"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "variance strike",
+        "condition (ITM)",
+        "window"
+      ],
+      "settlement": "cash conditional on ITM",
+      "payoff": "variance accrues only under a condition",
+      "variants": [
+        "corridor variance",
+        "var-contingent"
+      ],
+      "combinations": [
+        "cheapen a var-swap with a condition"
+      ],
+      "use": "conditionally-accruing variance",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_bespoke_option",
+      "name": "Bespoke Option",
+      "tag": "Bespoke Option EQD",
+      "family": "option",
+      "parties": [
+        "Option Buyer",
+        "Option Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays based on custom payoff formula"
+        ]
+      ],
+      "parameters": [
+        "underlying(s)",
+        "custom payoff function",
+        "expiry"
+      ],
+      "settlement": "cash per bespoke formula",
+      "payoff": "arbitrary structured payoff",
+      "variants": [
+        "basket",
+        "rainbow",
+        "worst-of/best-of"
+      ],
+      "combinations": [
+        "tailor an exact exposure/hedge"
+      ],
+      "use": "custom-payoff option",
+      "deck_slide": 9,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_barrier",
+      "name": "Barrier Option (Equity)",
+      "tag": "Barrier Option EQD",
+      "family": "barrier-option",
+      "parties": [
+        "Option Buyer",
+        "Option Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "pays out if barrier is triggered"
+        ]
+      ],
+      "parameters": [
+        "underlying",
+        "strike",
+        "barrier (KI/KO)",
+        "expiry"
+      ],
+      "settlement": "cash/physical if active",
+      "payoff": "knock-in/knock-out equity option",
+      "variants": [
+        "double barrier",
+        "digital"
+      ],
+      "combinations": [
+        "cheapen a vanilla with a barrier"
+      ],
+      "use": "barrier-conditioned equity option",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "eqd_deposit_strategy",
+      "name": "Deposit-Based Strategy",
+      "tag": "Depo Strategy EQD",
+      "family": "structured-deposit",
+      "parties": [
+        "Investor",
+        "Bank"
+      ],
+      "legs": [
+        [
+          "Investor",
+          "Bank",
+          "deposits cash"
+        ],
+        [
+          "Bank",
+          "Investor",
+          "pays interest + equity-linked return"
+        ]
+      ],
+      "parameters": [
+        "deposit notional",
+        "participation",
+        "reference",
+        "tenor"
+      ],
+      "settlement": "principal + linked return",
+      "payoff": "principal deposit + equity participation",
+      "variants": [
+        "capital-protected note",
+        "dual-currency deposit"
+      ],
+      "combinations": [
+        "yield pickup w/ protection"
+      ],
+      "use": "equity-linked deposit",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "equity"
+    },
+    {
+      "id": "cds_single",
+      "name": "Credit Default Swap (Single-Name)",
+      "tag": "CDS Single",
+      "family": "credit-swap",
+      "parties": [
+        "Protection Buyer",
+        "Protection Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "periodic premium = spread * notional * daycount"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "on credit event: notional * (100% - recovery)"
+        ]
+      ],
+      "parameters": [
+        "reference entity",
+        "reference obligation",
+        "notional",
+        "credit spread (bps)",
+        "credit event defs",
+        "recovery"
+      ],
+      "settlement": "premium leg + contingent protection leg",
+      "payoff": "insurance on a single entity's default",
+      "variants": [
+        "index CDS",
+        "CDS option"
+      ],
+      "combinations": [
+        "hedge a bond/loan exposure",
+        "curve & basis (CDS-bond) trades"
+      ],
+      "use": "single-name credit protection",
+      "deck_slide": 4,
+      "detail_level": "full",
+      "status": "reference",
+      "asset_class": "credit"
+    },
+    {
+      "id": "cds_index",
+      "name": "Credit Default Swap (Index)",
+      "tag": "CDS Index",
+      "family": "credit-swap",
+      "parties": [
+        "Protection Buyer",
+        "Protection Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "fixed running coupon (e.g. 100bps) + upfront adjustment"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "per-constituent: notional/N * (100% - recovery), name removed, index continues"
+        ]
+      ],
+      "parameters": [
+        "index (CDX/iTraxx)",
+        "N constituents",
+        "fixed coupon",
+        "upfront",
+        "6m roll",
+        "recovery"
+      ],
+      "settlement": "premium leg + waterfall per default",
+      "payoff": "standardized basket credit protection (waterfall)",
+      "variants": [
+        "single-name CDS",
+        "index option",
+        "tranches"
+      ],
+      "combinations": [
+        "hedge portfolio credit",
+        "macro credit view",
+        "index vs intrinsics"
+      ],
+      "use": "diversified credit protection",
+      "deck_slide": 6,
+      "detail_level": "full",
+      "status": "reference",
+      "asset_class": "credit"
+    },
+    {
+      "id": "cds_index_option",
+      "name": "CDS Index Option",
+      "tag": "CDS Index Option",
+      "family": "credit-option",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "right to buy/sell index protection at a strike spread"
+        ]
+      ],
+      "parameters": [
+        "index",
+        "strike spread",
+        "expiry",
+        "payer/receiver"
+      ],
+      "settlement": "enters index CDS on exercise",
+      "payoff": "option on credit-index spread",
+      "variants": [
+        "payer/receiver swaptions on credit"
+      ],
+      "combinations": [
+        "hedge credit-spread vol",
+        "express spread direction"
+      ],
+      "use": "optionality on credit spreads",
+      "deck_slide": 7,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "credit"
+    },
+    {
+      "id": "rpa",
+      "name": "Rate Participation Agreement",
+      "tag": "RPA",
+      "family": "structured-rate",
+      "parties": [
+        "Buyer",
+        "Seller"
+      ],
+      "legs": [
+        [
+          "Buyer",
+          "Seller",
+          "pays premium/fee"
+        ],
+        [
+          "Seller",
+          "Buyer",
+          "participation in a reference rate move"
+        ]
+      ],
+      "parameters": [
+        "reference rate",
+        "participation rate",
+        "cap/floor",
+        "tenor"
+      ],
+      "settlement": "cash on rate participation",
+      "payoff": "structured participation in a rate",
+      "variants": [
+        "cap/floor",
+        "collar"
+      ],
+      "combinations": [
+        "tailored rate exposure w/ participation"
+      ],
+      "use": "structured rate participation",
+      "deck_slide": 7,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "credit"
+    },
+    {
+      "id": "trs",
+      "name": "Total Return Swap (generic)",
+      "tag": "TRS",
+      "family": "swap",
+      "parties": [
+        "Total Return Payer",
+        "Total Return Receiver"
+      ],
+      "legs": [
+        [
+          "Payer",
+          "Receiver",
+          "pays financing (floating + spread)"
+        ],
+        [
+          "Receiver",
+          "Payer",
+          "pays total return of the asset"
+        ]
+      ],
+      "parameters": [
+        "reference asset",
+        "financing spread",
+        "notional",
+        "reset"
+      ],
+      "settlement": "net cash",
+      "payoff": "synthetic financed exposure to any asset",
+      "variants": [
+        "equity TRS",
+        "commodity TRS",
+        "municipal TRS",
+        "bond TRS"
+      ],
+      "combinations": [
+        "off-balance-sheet exposure",
+        "financing arbitrage"
+      ],
+      "use": "generic financed total return",
+      "deck_slide": 7,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "credit"
+    },
+    {
+      "id": "com_future",
+      "name": "Futures Contract",
+      "tag": "Future COM",
+      "family": "future",
+      "parties": [
+        "Long Position",
+        "Short Position"
+      ],
+      "legs": [
+        [
+          "Long",
+          "Clearing House",
+          "pays daily variation margin"
+        ],
+        [
+          "Short",
+          "Clearing House",
+          "pays daily variation margin"
+        ]
+      ],
+      "parameters": [
+        "underlying commodity",
+        "contract size",
+        "expiry",
+        "initial/variation margin"
+      ],
+      "settlement": "daily mark-to-market via clearing",
+      "payoff": "exchange-traded, cleared, marked daily",
+      "variants": "standardized future on a commodity",
+      "combinations": [
+        "roll strategies",
+        "calendar spreads"
+      ],
+      "use": [
+        "hedge commodity price",
+        "roll-yield / carry (see funding-carry sleeve)"
+      ],
+      "deck_slide": "cleared commodity future",
+      "detail_level": 10,
+      "status": "reference",
+      "asset_class": "commodity"
+    },
+    {
+      "id": "com_trs",
+      "name": "Total Return Swap (Commodity)",
+      "tag": "TRS COM",
+      "family": "swap",
+      "parties": [
+        "Total Return Payer",
+        "Total Return Receiver"
+      ],
+      "legs": [
+        [
+          "Payer",
+          "Receiver",
+          "pays financing (floating + spread)"
+        ],
+        [
+          "Receiver",
+          "Payer",
+          "pays total return of the commodity/index"
+        ]
+      ],
+      "parameters": [
+        "commodity/index",
+        "financing spread",
+        "notional",
+        "reset"
+      ],
+      "settlement": "net cash",
+      "payoff": "synthetic financed commodity exposure",
+      "variants": [
+        "equity TRS",
+        "excess-return vs total-return"
+      ],
+      "combinations": [
+        "commodity exposure without futures roll ops",
+        "index access"
+      ],
+      "use": "financed synthetic commodity return",
+      "deck_slide": 7,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "commodity"
+    },
+    {
+      "id": "muni_trs",
+      "name": "Municipal Total Return Swap",
+      "tag": "Muni TRS",
+      "family": "swap",
+      "parties": [
+        "TRS Payer",
+        "TRS Receiver"
+      ],
+      "legs": [
+        [
+          "Payer",
+          "Receiver",
+          "pays floating rate + asset depreciation"
+        ],
+        [
+          "Receiver",
+          "Payer",
+          "pays total return of municipal bond"
+        ]
+      ],
+      "parameters": [
+        "municipal bond/index",
+        "financing",
+        "notional",
+        "reset"
+      ],
+      "settlement": "net cash",
+      "payoff": "synthetic financed muni-bond exposure",
+      "variants": [
+        "MMD TRS",
+        "equity/commodity TRS"
+      ],
+      "combinations": [
+        "muni leverage/financing",
+        "tax-aware exposure"
+      ],
+      "use": "financed municipal-bond return",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "municipal"
+    },
+    {
+      "id": "mmd_trs",
+      "name": "MMD (Municipal Market Data) TRS",
+      "tag": "MMD TRS",
+      "family": "swap",
+      "parties": [
+        "TRS Payer",
+        "TRS Receiver"
+      ],
+      "legs": [
+        [
+          "Payer",
+          "Receiver",
+          "pays floating rate + MMD spread"
+        ],
+        [
+          "Receiver",
+          "Payer",
+          "pays MMD index total return"
+        ]
+      ],
+      "parameters": [
+        "MMD index",
+        "spread",
+        "notional",
+        "reset"
+      ],
+      "settlement": "net cash",
+      "payoff": "exposure to the MMD muni benchmark",
+      "variants": [
+        "muni TRS"
+      ],
+      "combinations": [
+        "hedge/express muni-curve views"
+      ],
+      "use": "synthetic MMD-index return",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "municipal"
+    },
+    {
+      "id": "mmd_rate_lock",
+      "name": "MMD Rate Lock",
+      "tag": "MMD Rate Lock",
+      "family": "forward",
+      "parties": [
+        "Borrower (Issuer)",
+        "Bank"
+      ],
+      "legs": [
+        [
+          "Borrower/Bank",
+          "-",
+          "locks MMD rate for a future bond issuance"
+        ]
+      ],
+      "parameters": [
+        "MMD reference",
+        "lock level",
+        "issuance date"
+      ],
+      "settlement": "cash settle at issuance",
+      "payoff": "pre-hedge a future muni issuance rate",
+      "variants": [
+        "treasury lock",
+        "forward-starting swap"
+      ],
+      "combinations": [
+        "issuer pre-hedge",
+        "rate-lock the deal"
+      ],
+      "use": "lock a future muni issuance rate",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "municipal"
+    },
+    {
+      "id": "muni_fees",
+      "name": "Municipal Fees",
+      "tag": "Muni Fees",
+      "family": "fee",
+      "parties": [
+        "Issuer",
+        "Underwriter"
+      ],
+      "legs": [
+        [
+          "Issuer",
+          "Underwriter",
+          "pays underwriting fees & expenses"
+        ]
+      ],
+      "parameters": [
+        "deal size",
+        "fee schedule"
+      ],
+      "settlement": "fee payment",
+      "payoff": "primary-issuance underwriting economics",
+      "variants": [],
+      "combinations": [
+        "models the cost layer of muni deals"
+      ],
+      "use": "muni underwriting fee structure",
+      "deck_slide": 14,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "municipal"
+    },
+    {
+      "id": "deposit",
+      "name": "Deposit",
+      "tag": "Depo",
+      "family": "deposit",
+      "parties": [
+        "Depositor",
+        "Bank"
+      ],
+      "legs": [
+        [
+          "Depositor",
+          "Bank",
+          "lends principal"
+        ],
+        [
+          "Bank",
+          "Depositor",
+          "pays principal + interest at maturity"
+        ]
+      ],
+      "parameters": [
+        "principal",
+        "rate",
+        "tenor"
+      ],
+      "settlement": "principal + interest at maturity",
+      "payoff": "term deposit / money-market placement",
+      "variants": [
+        "structured deposit",
+        "dual-currency"
+      ],
+      "combinations": [
+        "cash management",
+        "funding leg of structures"
+      ],
+      "use": "term deposit",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "funding"
+    },
+    {
+      "id": "interaffiliate_loan",
+      "name": "Interaffiliate Loan",
+      "tag": "Interaffiliate Loan",
+      "family": "loan",
+      "parties": [
+        "Entity A (lender)",
+        "Entity B (borrower)"
+      ],
+      "legs": [
+        [
+          "A",
+          "B",
+          "lends loan amount"
+        ],
+        [
+          "B",
+          "A",
+          "pays interest + principal at maturity"
+        ]
+      ],
+      "parameters": [
+        "principal",
+        "intercompany rate",
+        "tenor"
+      ],
+      "settlement": "interest + principal",
+      "payoff": "intra-group funding",
+      "variants": [
+        "cost-of-funds transfer"
+      ],
+      "combinations": [
+        "treasury / transfer pricing"
+      ],
+      "use": "intra-group funding",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "funding"
+    },
+    {
+      "id": "cost_of_funds",
+      "name": "Cost of Funds",
+      "tag": "COF",
+      "family": "funding-benchmark",
+      "parties": [
+        "Bank",
+        "Lender/Depositor"
+      ],
+      "legs": [
+        [
+          "Bank",
+          "Lender/Depositor",
+          "pays interest based on its funding cost"
+        ]
+      ],
+      "parameters": [
+        "funding-cost benchmark",
+        "spread"
+      ],
+      "settlement": "interest at COF",
+      "payoff": "internal funding-cost pass-through",
+      "variants": [
+        "FTP (funds transfer pricing)"
+      ],
+      "combinations": [
+        "price the funding leg of any structure"
+      ],
+      "use": "funding-cost benchmark",
+      "deck_slide": 10,
+      "detail_level": "diagram",
+      "status": "reference",
+      "asset_class": "funding"
+    }
+  ]
+}
