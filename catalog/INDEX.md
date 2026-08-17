@@ -1,10 +1,10 @@
 # Block Derivatives Catalog — Index
 
-*Generated from `build_catalog.py` — 80 strategy building blocks. Machine-readable source: [`derivatives_catalog.json`](derivatives_catalog.json), schema: [`schema.json`](schema.json).*
+*Generated from `build_catalog.py` — 120 strategy building blocks. Machine-readable source: [`derivatives_catalog.json`](derivatives_catalog.json), schema: [`schema.json`](schema.json).*
 
 > Each entry is a **building block, not a standalone strategy**. None is alpha alone — the value is in **composition** (hedging / arbitrage / combination) under the engine's governance.
 
-## Rates — Interest-rate & cross-currency derivatives  (24)
+## Rates — Interest-rate & cross-currency derivatives  (30)
 
 | id | strategy | tag | family | key legs |
 |---|---|---|---|---|
@@ -32,6 +32,12 @@
 | `xccy_swap_spread` | Cross-Currency Swap Spread (BGS) | Xccy Swap BGS | xccy-spread | Payer→Receiver: pays XCCY rate + spread ; Receiver→Payer: pays local IRS rate |
 | `xccy_non_mtm_onshore` | Onshore Non-MTM Cross-Currency Swap | Xccy non MTM Onshore | xccy-swap | A→B: Local currency A fixed rate ; B→A: Local currency B fixed rate |
 | `xccy_nd` | Non-Deliverable Cross-Currency Swap | Xccy ND | xccy-swap | A→B: USD floating ; B→A: NDF fixing vs strike, settled in USD |
+| `irs_basis_swap` | Interest Rate Basis Swap | Basis Swap IRS | basis-swap | A→B: pays floating index A plus spread ; B→A: pays floating index B |
+| `irs_cms` | Constant Maturity Swap | CMS IRS | swap | CMS→Floating: pays long-tenor swap rate ; Floating→CMS: pays money-market floating rate |
+| `irs_cms_spread_option` | CMS Spread Option | CMS Spread Option IRS | rate-option | Buyer→Seller: pays premium ; Seller→Buyer: pays when CMS spread exceeds strike |
+| `irs_range_accrual` | Range Accrual | Range Accrual IRS | structured-rate | Investor→Issuer: provides principal or fixed leg ; Issuer→Investor: pays coupon for in-ran |
+| `inflation_swap` | Zero-Coupon Inflation Swap | ZC Inflation IRS | inflation-swap | Inflation→Fixed: pays cumulative realized inflation ; Fixed→Inflation: pays compounded fix |
+| `inflation_cap_floor` | Inflation Cap / Floor | Inflation Option IRS | inflation-option | Buyer→Seller: pays premium ; Seller→Buyer: pays when inflation is above cap or below floor |
 
 ## Fx — Foreign-exchange derivatives (deliverable, onshore, and non-deliverable)  (26)
 
@@ -64,7 +70,7 @@
 | `ndf_fx_swap` | NDF FX Swap | NDF FX Swap | swap | A→B: NDF near leg ; B→A: NDF far leg |
 | `ndf_fx_swap_onshore` | NDF FX Swap Onshore | NDF FX Swap Onshore | swap | A→B: local currency NDF near leg ; B→A: local currency NDF far leg |
 
-## Equity — Equity derivatives (forwards, structured notes, options, variance/vol)  (16)
+## Equity — Equity derivatives (forwards, structured notes, options, variance/vol)  (28)
 
 | id | strategy | tag | family | key legs |
 |---|---|---|---|---|
@@ -84,8 +90,20 @@
 | `eqd_bespoke_option` | Bespoke Option | Bespoke Option EQD | option | Buyer→Seller: pays premium ; Seller→Buyer: pays based on custom payoff formula |
 | `eqd_barrier` | Barrier Option (Equity) | Barrier Option EQD | barrier-option | Buyer→Seller: pays premium ; Seller→Buyer: pays out if barrier is triggered |
 | `eqd_deposit_strategy` | Deposit-Based Strategy | Depo Strategy EQD | structured-deposit | Investor→Bank: deposits cash ; Bank→Investor: pays interest + equity-linked return |
+| `eqd_long_call` | Long Call | Long Call EQD | option | Buyer→Seller: pays premium ; Seller→Buyer: delivers upside above strike |
+| `eqd_long_put` | Long Put | Long Put EQD | option | Buyer→Seller: pays premium ; Seller→Buyer: pays downside below strike |
+| `eqd_covered_call` | Covered Call | Covered Call EQD | option-combo | Seller→Buyer: grants upside above strike ; Buyer→Seller: pays premium |
+| `eqd_protective_put` | Protective Put | Protective Put EQD | option-combo | Buyer→Seller: pays premium ; Seller→Buyer: covers losses below strike |
+| `eqd_bull_call_spread` | Bull Call Spread | Bull Call Spread EQD | option-combo | Buyer→Counterparty: buys lower-strike call ; Buyer→Counterparty: sells higher-strike call |
+| `eqd_bear_put_spread` | Bear Put Spread | Bear Put Spread EQD | option-combo | Buyer→Counterparty: buys higher-strike put ; Buyer→Counterparty: sells lower-strike put |
+| `eqd_butterfly` | Butterfly Spread | Butterfly EQD | option-combo | Buyer→Counterparty: buys wing options ; Buyer→Counterparty: sells two body options |
+| `eqd_condor` | Condor Spread | Condor EQD | option-combo | Buyer→Counterparty: buys outer wings ; Buyer→Counterparty: sells inner strikes |
+| `eqd_iron_condor` | Iron Condor | Iron Condor EQD | option-combo | Seller→Counterparty: sells inner put and call ; Seller→Counterparty: buys protective wings |
+| `eqd_calendar_spread` | Calendar Spread | Calendar EQD | option-combo | Buyer→Counterparty: sells near-dated option ; Buyer→Counterparty: buys later-dated option |
+| `eqd_put_spread_collar` | Put Spread Collar | Put Spread Collar EQD | option-combo | Holder→Counterparty: buys put spread ; Holder→Counterparty: sells call |
+| `eqd_lookback` | Lookback Option | Lookback EQD | path-option | Buyer→Seller: pays premium ; Seller→Buyer: pays using path maximum or minimum |
 
-## Credit — Credit derivatives (CDS, index, options, TRS)  (5)
+## Credit — Credit derivatives (CDS, index, options, TRS)  (15)
 
 | id | strategy | tag | family | key legs |
 |---|---|---|---|---|
@@ -94,13 +112,35 @@
 | `cds_index_option` | CDS Index Option | CDS Index Option | credit-option | Buyer→Seller: pays premium ; Seller→Buyer: right to buy/sell index protection at a strike  |
 | `rpa` | Rate Participation Agreement | RPA | structured-rate | Buyer→Seller: pays premium/fee ; Seller→Buyer: participation in a reference rate move |
 | `trs` | Total Return Swap (generic) | TRS | swap | Payer→Receiver: pays financing (floating + spread) ; Receiver→Payer: pays total return of  |
+| `cds_tranche` | CDS Index Tranche | Index Tranche CRD | credit-tranche | Buyer→Seller: pays tranche premium ; Seller→Buyer: covers portfolio loss within attachment |
+| `cds_bespoke_basket` | Bespoke CDS Basket | Bespoke Basket CRD | credit-basket | Buyer→Seller: pays negotiated premium ; Seller→Buyer: covers defined basket credit events |
+| `cds_first_to_default` | First-to-Default Basket | FTD CRD | credit-basket | Buyer→Seller: pays basket premium ; Seller→Buyer: pays on first qualifying default |
+| `cds_nth_to_default` | Nth-to-Default Basket | Nth-to-Default CRD | credit-basket | Buyer→Seller: pays basket premium ; Seller→Buyer: pays when the nth qualifying default occ |
+| `cds_loan` | Loan Credit Default Swap | LCDS CRD | credit-swap | Buyer→Seller: pays periodic spread ; Seller→Buyer: covers loss on syndicated loan |
+| `credit_recovery_swap` | Recovery Swap | Recovery Swap CRD | credit-swap | Fixed→Realized: pays fixed recovery after default ; Realized→Fixed: pays realized recovery |
+| `credit_spread_option` | Credit Spread Option | Spread Option CRD | credit-option | Buyer→Seller: pays premium ; Seller→Buyer: pays from spread beyond strike |
+| `credit_linked_note` | Credit-Linked Note | CLN CRD | structured-note | Investor→Issuer: pays principal ; Issuer→Investor: pays enhanced coupon and conditional pr |
+| `synthetic_cdo` | Synthetic CDO | Synthetic CDO CRD | structured-credit | Investor→SPV: funds or sells tranche protection ; SPV→Investor: pays premium less allocate |
+| `credit_asset_swap` | Asset Swap | Asset Swap CRD | bond-plus-swap | Investor→Counterparty: pays bond fixed coupon ; Counterparty→Investor: pays floating rate  |
 
-## Commodity — Commodity derivatives  (2)
+## Commodity — Commodity derivatives  (14)
 
 | id | strategy | tag | family | key legs |
 |---|---|---|---|---|
 | `com_future` | Futures Contract | Future COM | future | Long→Clearing House: pays daily variation margin ; Short→Clearing House: pays daily variat |
 | `com_trs` | Total Return Swap (Commodity) | TRS COM | swap | Payer→Receiver: pays financing (floating + spread) ; Receiver→Payer: pays total return of  |
+| `com_forward` | Commodity Forward | Forward COM | forward | Buyer→Seller: pays fixed forward price ; Seller→Buyer: delivers commodity or cash differen |
+| `com_swap` | Commodity Swap | Swap COM | swap | Fixed→Floating: pays fixed commodity price ; Floating→Fixed: pays observed floating price |
+| `com_option` | Commodity Call / Put | Option COM | option | Buyer→Seller: pays premium ; Seller→Buyer: pays intrinsic value if exercised |
+| `com_collar` | Commodity Collar | Collar COM | option-combo | Hedger→Counterparty: buys protective option ; Hedger→Counterparty: sells offsetting option |
+| `com_three_way_collar` | Three-Way Commodity Collar | 3-Way Collar COM | option-combo | Hedger→Counterparty: buys protective option and sells two options |
+| `com_crack_spread` | Crack Spread | Crack Spread COM | spread | Buyer→Counterparty: receives refined-product value ; Buyer→Counterparty: pays crude-oil va |
+| `com_crush_spread` | Crush Spread | Crush Spread COM | spread | Buyer→Counterparty: receives meal and oil value ; Buyer→Counterparty: pays soybean value |
+| `com_calendar_spread` | Commodity Calendar Spread | Calendar COM | spread | Buyer→Seller: buys one delivery month ; Buyer→Seller: sells another delivery month |
+| `com_basis_swap` | Commodity Basis Swap | Basis Swap COM | swap | Payer→Receiver: pays location or grade A price ; Receiver→Payer: pays location or grade B  |
+| `com_asian_option` | Asian Commodity Option | Asian Option COM | asian-option | Buyer→Seller: pays premium ; Seller→Buyer: pays average-price intrinsic value |
+| `com_swing_option` | Swing Option | Swing COM | volume-option | Buyer→Seller: pays premium or contract price ; Seller→Buyer: delivers buyer-selected daily |
+| `com_weather_derivative` | Weather Derivative | Weather COM | index-derivative | Buyer→Seller: pays premium or fixed leg ; Seller→Buyer: pays from weather-index outcome |
 
 ## Municipal — Municipal / MMD derivatives  (4)
 

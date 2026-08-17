@@ -1,6 +1,6 @@
 # Block Derivatives Catalog
 
-The **machine-readable backbone** of the Block sleeve: the ~80 derivative strategy *building blocks* from the
+The **machine-readable backbone** of the Block sleeve: 120 derivative strategy *building blocks* from the
 Derivatives Master Reference (Kareem Williams / Carter Warrens, Blaque Baux initiative), spanning **equity, FX,
 interest rates, credit, commodities, municipals, and funding**. This is the taxonomy everything in Block hangs
 off — pricing/execution code is layered on top later, keyed by `id`.
@@ -9,7 +9,7 @@ off — pricing/execution code is layered on top later, keyed by `id`.
 
 | File | What it is |
 |---|---|
-| [`derivatives_catalog.json`](derivatives_catalog.json) | The catalog — 80 self-describing strategy entries. **The source of record for machines.** |
+| [`derivatives_catalog.json`](derivatives_catalog.json) | The catalog — 120 self-describing strategy entries. **The source of record for machines.** |
 | [`schema.json`](schema.json) | JSON-Schema (draft-07) for a strategy entry — validate additions against it. |
 | [`INDEX.md`](INDEX.md) | Human-readable index (generated). |
 | [`build_catalog.py`](build_catalog.py) | The source of truth. Edit here, then `python build_catalog.py` regenerates all three above. |
@@ -50,15 +50,15 @@ that block participates in. Those links are where the actual research and return
 }
 ```
 
-## Coverage (80 blocks)
+## Coverage (120 blocks)
 
 | Asset class | # | Highlights |
 |---|---|---|
-| **Rates** | 24 | FRA, IRS (+ average/callable/arrears/OIS/ZC/onshore), cap/floor/collar/spread, swaptions (Eur/Berm/straddle), XCCY (MTM/non-MTM/ND/onshore), swap-spread, treasury lock |
+| **Rates** | 30 | FRA, IRS (+ average/callable/arrears/OIS/ZC/onshore), basis/CMS/range accrual, inflation swaps/options, cap/floor/collar/spread, swaptions, XCCY, swap-spread, treasury lock |
 | **FX** | 26 | spot & forwards (outright/avg/target/accumulator/onshore), FX swap, options (vanilla/quanto/digital/barrier/double/one-touch/Asian/RR/straddle/strangle), full **NDF** set |
-| **Equity** | 16 | autocallable note, forward (amort/accreting strike), TRS, ASR, Asian, fwd-start, cliquet, **vol/variance/conditional-var/var-contingent**, bespoke, barrier, equity-linked deposit |
-| **Credit** | 5 | CDS single-name, CDS index (waterfall), CDS index option, RPA, TRS |
-| **Commodity** | 2 | cleared future, commodity TRS |
+| **Equity** | 28 | vanilla calls/puts, covered/protective positions, verticals, butterfly/condor/calendar, autocallable, forward, TRS, ASR, Asian, cliquet, variance/vol, barrier, lookback, equity-linked deposit |
+| **Credit** | 15 | CDS single-name/index/options/tranches, default baskets, LCDS, recovery swap, CLN, synthetic CDO, asset swap, TRS |
+| **Commodity** | 14 | futures, forwards, swaps, options, collars, processing/calendar/basis spreads, Asian and swing options, weather derivatives, TRS |
 | **Municipal** | 4 | Muni TRS, MMD TRS, MMD rate lock, muni fees |
 | **Funding** | 3 | deposit, interaffiliate loan, cost-of-funds |
 

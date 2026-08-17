@@ -52,7 +52,7 @@ Block's second and larger half is the platform's **derivatives reference layer**
 taxonomy (equity, FX, rates, credit, commodities, municipals, funding), made computable and held to the same
 verify-before-claim discipline as the rest of Blaque Baux.
 
-- **[`catalog/`](catalog/) — 80 strategy building blocks.** A machine-readable taxonomy
+- **[`catalog/`](catalog/) — 120 strategy building blocks.** A machine-readable taxonomy
   ([`derivatives_catalog.json`](catalog/derivatives_catalog.json), [`schema.json`](catalog/schema.json)):
   parties, cash-flow legs, parameters, payoff, variants, and the documented **combination/hedging** plays for
   each. Every entry is a *building block, not standalone alpha* — the value is in composition. Status ladder
@@ -91,7 +91,7 @@ base/blueprint and holds the [full family roster](https://github.com/blaquebaux/
 ## Layout
 ```
 engine/     the Blaque Baux platform (git submodule -> blaquebaux/base)
-catalog/    80-block derivatives taxonomy (JSON + schema + index) — the backbone
+catalog/    120-block derivatives taxonomy (JSON + schema + index) — the backbone
 pricing/    reference pricers (IRS / FX forward / Black-Scholes / CDS) + identity self-test
 analytics/  index / correlation / beta / corporate-action layer + self-test
 docs/       derivatives_framework.md — the seven considerations, computed and proven

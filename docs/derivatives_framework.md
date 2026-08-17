@@ -21,7 +21,7 @@ One reference pricer per major class, keyed to the catalog `id`, each proven aga
 | `fx_vanilla` / equity | `bs_option` (+ Δ Γ ν Θ) | **put-call parity** (exact) |
 | `cds_single` | `cds_value`, `par_cds_spread` | **credit triangle** par ≈ h·(1−R) |
 
-The `status` ladder (`reference → spec → implemented → validated`) tracks how far each of the 80 blocks has come; a block reaches `implemented` only once its pricer passes its identity.
+The `status` ladder (`reference → spec → implemented → validated`) tracks how far each of the 120 blocks has come; a block reaches `implemented` only once its pricer passes its identity.
 
 ## 2. Price-movement correlation → [`analytics/index_analytics.jl`](../analytics/index_analytics.jl)
 
