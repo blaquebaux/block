@@ -71,6 +71,24 @@ verify-before-claim discipline as the rest of Blaque Baux.
 The through-line: every readout is a **guardrail, not a signal** — what a bespoke book actually owns and where
 it's exposed. None of these blocks is a money-maker alone; the value is the comfort and control they lend.
 
+## The variation program — modifying the catalog to death
+
+Block's next phase: take each catalogued derivative and **vary it to death** — combine the carry of one with
+the convexity of another, the derivative-of-a-derivative, ATM vs OTM, hedged vs naked — and suss out, with the
+family's honest method (P&L, skew, the fat-tail toolkit, benchmark vs the nulls), *which added component is
+paying the buyer versus paying the desk*. Finance firms earn a fee on every component bolted onto a bespoke
+instrument; the research question is which components genuinely add return, cut risk, or are pure fee-in-a-suit.
+
+**Variation #1 — straddles** ([`research/block_straddle_variations.py`](research/block_straddle_variations.py)):
+a Black-Scholes P&L simulator on the real SPY path (implied vol swept, since VIX isn't on the feed), across
+long/short straddle and OTM strangle. Findings: (1) **no edge without the vol-risk-premium** — at fair pricing
+every variant is ~±0.2 Sharpe noise; the entire return is implied>realized. (2) **Long vol is a cost** (the
+bleed profile), worst when you buy a fat post-spike premium that mean-reverts. (3) **The short strangle "wins"
+in-sample (+0.92 Sharpe, 72% win-rate) — and that's the trap:** its catastrophic tail simply isn't in
+2016–2026 monthly bars, but [brace](https://github.com/blaquebaux/brace)'s SVXY lived it (−95%, Feb-2018). The
+straddle is a pure VRP instrument; the variants reshape the premium/tail tradeoff, not the bet — and the
+best-looking one is the most dangerous. *Next: delta-hedged (isolate gamma/vega), regime-gated short, calendar/diagonal.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
