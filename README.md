@@ -238,16 +238,42 @@ and gold is the prize** — broad commodities carry moderate equity beta (+0.32)
 **gold** is the standout: Sharpe **+0.70**, near-zero equity beta (**+0.08**), low crisis-corr — the most
 independent, most diversifying single asset in the whole study.
 
-**The four-block synthesis (equity/vol · rates · credit · FX · commodities — the cross-asset map, complete).**
-Standalone "premia" mostly dissolve under the toolkit: **VRP** is a crash tail dressed as income, **credit** is
-underpaid equity beta in a wrapper, **FX & commodity carry** are priced roughly *fairly* with violent tails.
-The durable edges are **not premia** — they are **(1) diversification** (duration's crisis-mirror positive skew,
-and gold's near-zero beta actually hedge an equity book) and **(2) risk-management / timing** (the equity-vol
-gate that gave FX carry the arc's only positive alpha; curve-timing that dodges the commodity roll-tax). Block's
-founding thesis holds: **the value of a four-block book is in combination and risk control, not in any single
-harvested premium** — the edge is the portfolio, not the trade. *Next: fold gold + a duration hedge + the
-FX-carry gate into a governed cross-asset test book, and open the rates/credit sections of the 120-catalog
-variation program (swaptions, CDS index, tranche structures).*
+### Municipal block — the "good credit"
+
+**Municipal #1 — the muni spread** ([`research/block_muni_premium.py`](research/block_muni_premium.py)): the muni
+spread (MUB−IEF, HYD−MUB) tested like credit #1. **Munis are the "good credit"** — about *half* the equity beta
+of corporates (IG-muni β +0.11 vs +0.22; HY-muni +0.19 vs +0.39), because they default on politics/rates, not
+earnings. But the pre-tax spread is thin (+0.9% / +0.7%) with negative Jensen alpha (−0.6% / −1.8%) and a
+March-2020 *liquidity* tail (skew −1.15 / −1.52, crisis-corr +0.61). **The real premium is the tax code:** MUB's
+3.5% yield is a 5.8% taxable-equivalent (top bracket) vs IEF's 4.2% — a **+1.6%/yr after-tax pickup** the pre-tax
+return can't show. **Verdict:** for a taxable investor munis dominate corporate credit (lower beta + tax pickup),
+but the edge is the exemption, not a harvestable spread — neither is a standalone premium.
+
+### Funding block — pennies, then a gap
+
+**Funding #1 — the front-end money-market premium** ([`research/block_funding_premium.py`](research/block_funding_premium.py)):
+isolated with floating-rate pairs (FLOT−USFR, MINT−BIL) that strip duration entirely. **A real, independent,
+steady carry** (+0.5…0.75%/yr at near-zero equity beta) — but **pure short-liquidity:** the most extreme negative
+skew in the whole study (−9.3 to −23.6), where the worst *day* (−6.9%) erases ~a decade of carry and it gaps in a
+freeze (Mar-2020, crisis-corr +0.62). **The Sharpe is an illusion** — FLOT−USFR's +0.15 becomes +0.61 once you
+exclude March-2020 alone; one month *is* the risk. **Verdict:** fairly-priced liquidity-crisis insurance-selling
+— thin pennies for a rare violent gap; it belongs in a book as *sized insurance-selling*, never as "high-Sharpe
+carry." The flattering calm-Sharpe is the exact trap the whole arc keeps exposing: the metric flatters, the tail decides.
+
+### The seven-block synthesis — the cross-asset map, complete
+
+All seven catalog categories now tested with one honest toolkit (equity/vol · rates · credit · commodities · FX ·
+**municipals** · **funding**). **Standalone "premia" mostly dissolve:** VRP is a crash tail dressed as income;
+credit is underpaid equity beta in a wrapper; munis are better credit but the edge is *tax*, not spread; FX &
+commodity carry are priced roughly *fairly* with violent tails; funding is insurance-selling whose Sharpe is an
+illusion. **The durable edges are not premia** — they are **(1) diversification** (duration's crisis-mirror
+positive skew, and gold's near-zero beta actually hedge an equity book) and **(2) risk-management / timing** (the
+equity-vol gate that gave FX carry the arc's only positive alpha; curve-timing that dodges the commodity roll-tax).
+And one signature recurs in every block — **the tail is the whole story, and headline metrics flatter it.** Block's
+founding thesis holds: **the value of a cross-asset book is in combination and risk control, not in any single
+harvested premium** — the edge is the portfolio, not the trade. *Next: fold gold + a duration hedge + the FX-carry
+gate into a governed cross-asset test book, and open the rates/credit sections of the 120-catalog variation
+program (swaptions, CDS index, tranche structures).*
 
 ## About Blaque Baux
 
