@@ -140,6 +140,31 @@ cushion to profit and both can still be wiped by one spike (maxDD −100%). brac
 *the strike matters more than the structure, and the tail is the whole story.* *Next: the rates block
 (swaps/swaptions) and the credit block (CDS/index) — genuinely new economics beyond the vol premium.*
 
+**Variation #5 — swaptions: the rate-vol premium and its two tails** ([`research/block_rates_swaption.py`](research/block_rates_swaption.py)):
+the rates block of the catalog, modeled as options on duration (payer swaption ≈ put on TLT, receiver ≈ call).
+Findings: **(1)** a real *rate* VRP — selling the rate straddle pays and scales with the premium (Sharpe +0.17
+fair → **+0.89** at a 19% VRP). **(2)** But rates have **two** tails, not equity's one, and the violent one is
+the side I didn't expect: the worst single-month tail is the **receiver / rates-*down*** side (short receiver
+worst month −16%, skew −2.66 — the Mar-2020 flight-to-quality bond *spike*), while the payer / rates-up tail
+(2022) is a slow **grind** (−17% cumulative, worst month only −8%). **(3)** A twist vs the equity arc: rates
+*contain* their worst year (2022) in-sample, so the short-straddle Sharpe is more trustworthy than equity
+short-vol's — but negative skew both ways keeps it insurance-writing, and the Bermudan early-exercise feature is
+fee-in-a-suit for a seller. **Verdict:** the rate-vol premium is real and **double-tailed**; sell it sized for
+*both* tails, never as clean carry.
+
+**Variation #6 — CDS index tranches: the correlation trade, and 2008** ([`research/block_credit_tranches.py`](research/block_credit_tranches.py)):
+the credit block's defining machine (tranche / first-to-default / Nth-to-default / synthetic CDO), modeled with
+the market-standard one-factor **Gaussian copula**. Findings: **(1) tranching creates nothing** — the invariance
+check is exact (Σ tranche loss = portfolio expected loss); it only *redistributes* the same loss by seniority,
+so the structuring fee buys slicing, not edge — the purest fee-in-a-suit. **(2) The senior "AAA safety" is a
+correlation bet:** at ρ=0.1 the super-senior tranche loses **0.0%** (bulletproof on paper), but as ρ→0.9 the
+senior [7–15%] jumps **≈5×** and the super-senior to 1.8–3.9% — in 2008 ρ→1 and the "impossible" AAA losses
+simply happened. **(3) The trade *is* the equity/senior split:** equity is *short* correlation (corr-delta
+−55%), senior is *long* correlation risk — selling a senior tranche is **writing systemic insurance** (the
+steamroller at portfolio level). **Verdict:** the catalog's most infamous instrument makes a senior claim look
+safe by hiding a correlation tail inside a flattering metric — *the metric flatters, the tail decides*, in its
+most consequential form. 2008 was the bill for selling systemic-correlation insurance and stamping it AAA.
+
 ### Rates block — the term premium / duration carry
 
 **Rates #1 — does bearing duration pay?** ([`research/block_rates_termpremium.py`](research/block_rates_termpremium.py)):
