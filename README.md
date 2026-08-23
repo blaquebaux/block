@@ -179,6 +179,21 @@ applied to **pricing**. **Verdict:** CMS convexity is honestly-earned value, but
 of a fee that hides in an assumption rather than a line — the "innovation" is the desk's information edge on an
 unobservable, not new economics. *Rule: when value depends on σ or ρ, ask for the σ or ρ, not just the price.*
 
+**Variation #8 — commodity structures: crack spread · Asian option · three-way collar** ([`research/block_commodity_structures.py`](research/block_commodity_structures.py)):
+three commodity-block structures chosen to span the *honest range* — the program isn't only about traps.
+**(1) Crack spread** (UGA gasoline − USO crude, the refiner margin) is a **real, diversifying exposure**: near-zero
+equity correlation (+0.05) and — rare — *positive* skew (+1.25; the tail is on the upside, +95% in 2020 as crude
+collapsed but products held). Not standalone alpha (Sharpe +0.34), but a genuinely uncorrelated positive-skew
+sleeve. **(2) The Asian (average-rate) option is the modification that pays the *buyer*:** averaging cuts the
+effective vol (terminal 21% → average 12%, ≈/√3), so it's **44% cheaper** — and the discount is *fair*, a better,
+cheaper hedge for anyone with continuous/averaged exposure. Not every modification is desk margin. **(3) The
+three-way collar is the trap:** "widen the zero-cost band" by re-selling a deep put, and below that strike you're
+*long the crash again* — worst 3-mo **−61% vs the plain collar's −10%** (skew −2.16 vs −0.28); in 2020 oil it blew
+through exactly where you thought you were protected. **The sharpened rule (with #6, #7):** a modification pays
+the **buyer** when it genuinely *reduces* risk (Asian averaging) and the **desk** when it *hides* risk (the
+three-way's re-sold tail, the tranche's correlation, the CMS's vol mark) — *read the payoff to the tail, not the
+brochure*; and some structures are honest exposure, neither trick nor trap (the crack spread).
+
 ### Rates block — the term premium / duration carry
 
 **Rates #1 — does bearing duration pay?** ([`research/block_rates_termpremium.py`](research/block_rates_termpremium.py)):
