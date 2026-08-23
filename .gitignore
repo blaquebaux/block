@@ -15,3 +15,7 @@ logs/
 # macOS
 .DS_Store
 ._*
+crossasset_target.json
+alpaca_ledger_crossasset.sqlite
+alpaca_audit_crossasset.jsonl
+logs/

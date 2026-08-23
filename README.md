@@ -271,9 +271,24 @@ positive skew, and gold's near-zero beta actually hedge an equity book) and **(2
 equity-vol gate that gave FX carry the arc's only positive alpha; curve-timing that dodges the commodity roll-tax).
 And one signature recurs in every block — **the tail is the whole story, and headline metrics flatter it.** Block's
 founding thesis holds: **the value of a cross-asset book is in combination and risk control, not in any single
-harvested premium** — the edge is the portfolio, not the trade. *Next: fold gold + a duration hedge + the FX-carry
-gate into a governed cross-asset test book, and open the rates/credit sections of the 120-catalog variation
-program (swaptions, CDS index, tranche structures).*
+harvested premium** — the edge is the portfolio, not the trade.
+
+### The governed cross-asset keeper book (graduated to live)
+
+The payoff: assemble **only** the validated keepers into one book and test whether the *combination* clears the
+bar no single block did. Validation ([`research/crossasset_keeper_book.py`](research/crossasset_keeper_book.py)):
+equal-weight three sleeves — **gold**, **gated duration** (IEF, trend AND curve-carry), **equity-vol-gated FX
+carry** — that are near-uncorrelated (cross-corr +0.17 / −0.05 / −0.22). The book's Sharpe **+0.83 exceeds every
+standalone sleeve** (gold +0.72), with low equity correlation (+0.15), a −10% max drawdown, and positive crisis
+years (2020 +12.7%, 2022 ~flat). As a cash-funded overlay it lifts an equity core from Sharpe **+0.75 → +0.93**
+(1×) and dominates 60/40 (+0.70). Honest caveats: the book is **gold-dominated** (duration & FX carry earn their
+place as low/negative-correlation *ballast*, not return), it's a Sharpe/return *enhancer* not a drawdown hedge,
+and it leans on one decade. But the thesis is **validated — the edge is the portfolio** — so it graduates to the
+governed allocator: [`live/crossasset_allocator.py`](live/crossasset_allocator.py) emits today's target book
+(as of the last settled close), and [`live/crossasset_live.jl`](live/crossasset_live.jl) routes it through the
+engine's Layer-3 safety gate (preflight, idempotency, reconciliation, HWM, kill switch) — **no LLM in the order
+path.** Dry-run PASSES the gate (5 names, gross 1.0x). *Next: open the rates/credit sections of the 120-catalog
+variation program (swaptions, CDS index, tranche structures).*
 
 ## About Blaque Baux
 

@@ -1,0 +1,6 @@
+# crossasset keeper-book  asof=2026-08-21 mode=keeperbook regime=dur:off,fxcarry:on gross=1.000
+FXA 0.166667
+FXB 0.166667
+FXF -0.166667
+FXY -0.166667
+GLD 0.333333
