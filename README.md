@@ -165,6 +165,20 @@ steamroller at portfolio level). **Verdict:** the catalog's most infamous instru
 safe by hiding a correlation tail inside a flattering metric — *the metric flatters, the tail decides*, in its
 most consequential form. 2008 was the bill for selling systemic-correlation insurance and stamping it AAA.
 
+**Variation #7 — CMS: the convexity fee, and where the margin hides** ([`research/block_rates_cms.py`](research/block_rates_cms.py)):
+the CMS family of the catalog (constant-maturity swap, CMS spread option, range accrual). A CMS pays a long-tenor
+swap rate on a short schedule, forcing a **convexity adjustment** (the fair CMS rate sits above the forward, by
+Jensen). Findings: **(1) the adjustment is *real*, not fee-in-a-suit** — its sign is model-independent (Jensen),
+and a 10y CMS genuinely carries ~25bp, a 30y ~60bp+. **(2) But the margin hides in the vol mark:** the *same* 10y
+CMS is worth **9bp at σ=15% and 49bp at σ=35%** (the 30y swings ~97bp) — purely from the vol *assumption* the
+buyer can't observe. The fee isn't a charge, it's a **mark**. **(3) The CMS spread option** (10y−2y steepener)
+tells the same story on **correlation** — its value falls **51%** as the rate-rate ρ goes 0→0.9. **The unifying
+law (with #6):** exotic value lives in an *unobservable* parameter (σ for CMS, ρ for the spread option and the
+tranche), so the "fair price" flatters and the *assumption* decides — the metric-flatters/tail-decides law
+applied to **pricing**. **Verdict:** CMS convexity is honestly-earned value, but it's the catalog's clearest case
+of a fee that hides in an assumption rather than a line — the "innovation" is the desk's information edge on an
+unobservable, not new economics. *Rule: when value depends on σ or ρ, ask for the σ or ρ, not just the price.*
+
 ### Rates block — the term premium / duration carry
 
 **Rates #1 — does bearing duration pay?** ([`research/block_rates_termpremium.py`](research/block_rates_termpremium.py)):
