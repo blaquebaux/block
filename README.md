@@ -208,6 +208,25 @@ deletes the cover). The discount/enhancement is always the tail, priced out. The
 **average-rate forward** (averaging genuinely cuts vol — a fair, cheaper hedge). *Read the payoff to the tail,
 not the brochure* — this closes the option-family sweep across vol, rates, credit, commodity, and FX.
 
+**Variation #10 — linear/structural: funding, basis, convention** ([`research/block_linear_structural.py`](research/block_linear_structural.py)):
+the catalog's linear entries (IRS, basis/OIS/zero-coupon swaps, cross-currency swap, NDF, asset swap, **total
+return swap**, quanto, funding legs) carry *no option tail*, so the risk moves to other axes. **(1) The TRS is the
+TARF's linear twin:** synthetic leverage for a ~0.4%/yr spread, but the tail is the **funding-pull / margin**
+wipeout — on real SPY, 3× is wiped by COVID (−34%), 5× by 2020 *and* 2022, 8× by 2018 too; Archegos (2021, ~5–8×
+via TRS) is the proof. The visible fee is trivial; the funding leg is the risk. **(2) The cross-currency basis**
+is a "free arbitrage" that isn't — a *fee for balance-sheet scarcity* that gaps in stress (JPY ≈ −140bp in
+Mar-2020) — and, honestly, *not* recoverable from an equity/ETF feed (flagged, not faked). **(3) Quanto/convention**
+value hides in an unobservable correlation, like the CMS σ and tranche ρ. **The grand unifying law (all 10
+variations):** a modification never conjures return — it *relocates risk onto an axis the buyer isn't watching*:
+options hide it in the **tail**, exotic pricing in an **unobservable mark**, linear/structural in the **funding
+leg or basis**. The honest exceptions prove the rule — the Asian, the average-rate forward, the crack spread, and
+the weather derivative (≈zero market beta by construction) genuinely serve the user, fairly priced. **The one
+rule the whole program earns: read the payoff to the tail, the mark, and the funding — never the brochure.**
+
+*The "modify to death" program now spans all six catalog blocks — vol (#1–4), rates (#5, #7), credit (#6),
+commodity (#8), FX (#9), and linear/structural (#10) — a complete honest map of where a derivative's fee actually
+lives.*
+
 ### Rates block — the term premium / duration carry
 
 **Rates #1 — does bearing duration pay?** ([`research/block_rates_termpremium.py`](research/block_rates_termpremium.py)):
