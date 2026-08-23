@@ -192,6 +192,22 @@ default-risk premium is not an independent earned premium here — it's underpai
 illiquidity; for a cross-asset book, HY credit is not diversification (hold equity directly, or duration for a
 real hedge). *Next: gate credit on a risk-on regime (does timing rescue it?), then FX / commodities carry.*
 
+### FX block — the carry premium
+
+**FX #1 — the carry premium: the classic earned return, and its crash tail** ([`research/block_fx_carry.py`](research/block_fx_carry.py)):
+FX carry is the most-cited *independent* premium in macro — borrow the low-yielders, lend the high-yielders.
+Tested two ways: the packaged DBV ETF (2016–23) and a self-constructed G10 basket ranking six CurrencyShares
+ETFs by their own trailing distribution yield (long top-2 / short bottom-2, dollar-neutral). Findings: **(1)
+construction validated** — the yield ranking is textbook (AUD/GBP/CAD high, CHF/JPY the funders). **(2) The
+premium is real but thin** — +2.4%/yr constructed (Sharpe +0.32), +1.4% DBV. **(3) The steamroller is real** —
+negative skew on both (−0.54 / −0.57) and it partly unwinds in risk-off (corr **+0.57** with equity on its
+worst days). **(4) But it's the *least* costume of the earned premia:** vs credit, carry's equity beta is lower
+(+0.22 vs +0.39), crisis-correlation milder (+0.57 vs +0.86), and Jensen's alpha is ~0 (−0.6% / −0.1%) rather
+than deeply negative — carry keeps a genuine independence credit lacked. **Verdict:** of VRP / credit / carry,
+FX carry is the closest thing to a real standalone premium — but it's thin, crash-prone, and its alpha is ~0,
+not positive: you're paid roughly *fairly* for bearing an equity-correlated tail. The nickels are real; so is
+the steamroller. *Next: regime-gate carry to dodge the unwinds, then commodities carry (backwardation / roll).*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
