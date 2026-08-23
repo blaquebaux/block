@@ -42,9 +42,15 @@ lead-lag edge). What earns its keep is **owning the four blocks as a diversified
 4.1/5 bets) and trend-following them** — the linkages are for hedging and sizing, not stat-arb.
 
 ## Status
-**Research: first pass complete — a diversified cross-asset basket + risk framework, not linkage stat-arb**
-(`research/`). The interlock is a risk map; diversification is the edge. No live driver; nothing validated
-to the spine's bar.
+**Research: three bodies of work, all on the record.** (1) The original cross-asset **linkage** study — a
+diversified basket + risk framework, not stat-arb (scorecard above). (2) The **seven-block premium map**
+(equity-vol · rates · credit · commodities · FX · municipal · funding, below) and its graduation into a
+**governed cross-asset keeper book** ([`live/crossasset_allocator.py`](live/crossasset_allocator.py) +
+[`live/crossasset_live.jl`](live/crossasset_live.jl)) — gold + gated duration + equity-vol-gated FX carry routed
+through the Layer-3 safety gate, **dry-run PASSES**. (3) The **"modify to death" variation program** — ten
+catalog structures each varied on real data or a market-standard model, synthesized in the whitepaper
+[**"Where the Fee Lives"**](docs/derivatives_honesty.html). The 120-catalog itself remains a reference layer;
+nothing here is validated to the spine's live-money bar.
 
 ## The derivatives reference — catalog, pricing, analytics
 
@@ -379,8 +385,8 @@ and it leans on one decade. But the thesis is **validated — the edge is the po
 governed allocator: [`live/crossasset_allocator.py`](live/crossasset_allocator.py) emits today's target book
 (as of the last settled close), and [`live/crossasset_live.jl`](live/crossasset_live.jl) routes it through the
 engine's Layer-3 safety gate (preflight, idempotency, reconciliation, HWM, kill switch) — **no LLM in the order
-path.** Dry-run PASSES the gate (5 names, gross 1.0x). *Next: open the rates/credit sections of the 120-catalog
-variation program (swaptions, CDS index, tranche structures).*
+path.** Dry-run PASSES the gate (5 names, gross 1.0x). *The 120-catalog variation program that this groundwork
+enables is now complete — ten structures across all six blocks, synthesized in [**"Where the Fee Lives"**](docs/derivatives_honesty.html).*
 
 ## About Blaque Baux
 
