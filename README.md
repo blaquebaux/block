@@ -123,6 +123,23 @@ blow-up (brace/SVXY) for a chronic, *survivable* bleed. The "right" short-vol st
 choice, not a Sharpe one** — and only tail data could reveal it. *Next: variance/vol swaps (the cleaner VRP
 instrument), then the rates & credit blocks.*
 
+**Variation #4 — variance vs vol swaps: the pure VRP, and its convexity** ([`research/block_variance_swaps.py`](research/block_variance_swaps.py)):
+the straddle family kept circling the vol premium through strikes and paths; the **variance swap** is the pure
+instrument (pays realized − strike variance, no strike/delta/path), and the **vol swap** is its *linear* cousin.
+Comparing them prices the premium cleanly and exposes the convex tail. Two honest findings, both of which
+corrected a prior: **(1) "fair" pricing is a loser.** On a *trailing-realized* strike, both swaps lose heavily
+even at mult=1.0 (vol −0.66 Sharpe, var −0.92) — trailing realized systematically under-forecasts the
+fat-tailed *forward* realized, so you're short a violently negative-skewed forecast error. **This is the whole
+reason the market strike (VIX) sits above realized** — the VRP is the fee for that un-forecastable spike; you
+only turn a profit once you add a real premium buffer (the vol swap needs a *19%* cushion to reach +0.47).
+**(2) Convexity is terminal.** variance = vol², so a k× spike costs a var swap ~k² vs the vol swap's ~k: worst
+month **−1779% vs −333%**, skew −4.53 vs −2.24, COVID −892% vs −267%, ruin-months 26 vs 9 — the exact
+convexity that detonated short-variance books in 2008. **Verdict:** the **vol swap dominates the var swap**
+(same premium, linear survivable tail vs quadratic terminal one), but neither is free — both need a real VRP
+cushion to profit and both can still be wiped by one spike (maxDD −100%). brace at heart, in cleanest form:
+*the strike matters more than the structure, and the tail is the whole story.* *Next: the rates block
+(swaps/swaptions) and the credit block (CDS/index) — genuinely new economics beyond the vol premium.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
