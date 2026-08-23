@@ -208,6 +208,22 @@ FX carry is the closest thing to a real standalone premium — but it's thin, cr
 not positive: you're paid roughly *fairly* for bearing an equity-correlated tail. The nickels are real; so is
 the steamroller. *Next: regime-gate carry to dodge the unwinds, then commodities carry (backwardation / roll).*
 
+**FX #2 — regime-gated carry: can timing dodge the steamroller?** ([`research/block_fx_carry_timed.py`](research/block_fx_carry_timed.py)):
+carry's crashes *are* vol spikes, so gating exposure off in risk-off should dodge the unwind. The real test is
+whether a gate *fixes the skew and cuts the crisis-correlation*, not just trims the mean. Four lag-safe gates
+tested; the result is clean. **The equity-vol gate wins decisively** — crisis-corr **+0.57 → −0.01**, maxDD
+−21% → −12%, skew −0.54 → −0.36 (the steamroller removed), while Sharpe *holds* (+0.32 → +0.31) and Jensen
+alpha **flips positive (−0.6% → +0.6%)** — the first genuine positive independent alpha in the whole
+earned-premium arc, and it came from *dodging the tail, not a fatter premium*. **The wrong gates fail, honestly
+reported:** own-vol over-trims (Sharpe → +0.15), the dollar gate *worsens* skew (−1.00) and keeps crisis-corr
++0.39, momentum whipsaws (+0.09). **The lesson — match the gate to the failure mode:** carry fails in equity-vol
+spikes, so an equity-vol filter is the right signal and price/dollar trend are not — "match the signal to the
+sleeve," now proven at the gate level. **Caveat:** the winning alpha is small (+0.6%) on one decade and
+un-costed for turnover — a real improvement, not a validated keeper. **Verdict:** timing turns FX carry from a
+fairly-priced, crash-prone premium into a small positive-alpha, tail-*managed* one — the arc's first true (if
+thin) edge, and exactly on the program's thesis, the edge is *risk management*, not the premium. *Next and last
+asset block: commodities carry (backwardation / roll-yield) — completing Block's four-block cross-asset map.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
