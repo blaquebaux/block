@@ -87,7 +87,17 @@ bleed profile), worst when you buy a fat post-spike premium that mean-reverts. (
 in-sample (+0.92 Sharpe, 72% win-rate) — and that's the trap:** its catastrophic tail simply isn't in
 2016–2026 monthly bars, but [brace](https://github.com/blaquebaux/brace)'s SVXY lived it (−95%, Feb-2018). The
 straddle is a pure VRP instrument; the variants reshape the premium/tail tradeoff, not the bet — and the
-best-looking one is the most dangerous. *Next: delta-hedged (isolate gamma/vega), regime-gated short, calendar/diagonal.*
+best-looking one is the most dangerous.
+
+**Variation #2 — the delta-hedged short straddle** ([`research/block_straddle_deltahedged.py`](research/block_straddle_deltahedged.py)):
+sell the ATM straddle and delta-hedge daily, stripping the directional luck to isolate the pure vol premium
+(realized vs implied variance). Finding: **the first modification that genuinely *improves* the book** —
+removing the directional noise earns the *same* premium at a higher Sharpe (+0.21→+0.48 at a 10% VRP; vol
+9%→7%), which is exactly why vol desks hedge. But it **doesn't remove the short-gamma tail** (the worst month
+is still a big loss on a vol spike), and at fair pricing (mult=1.0) it's still ~0 Sharpe — no edge without the
+premium. Honest caveat: the lift is *gross* of daily-rehedging cost (cheap on SPY, ruinous on an illiquid
+underlying). So the added component (hedging) **pays the buyer** — cleaner harvest, same bet (brace, refined).
+*Next: regime-gate the hedged short (harvest in calm only) and calendar/diagonal (own the far tail cheaply) — the modifications that attack the tail.*
 
 ## About Blaque Baux
 
