@@ -79,6 +79,11 @@ family's honest method (P&L, skew, the fat-tail toolkit, benchmark vs the nulls)
 paying the buyer versus paying the desk*. Finance firms earn a fee on every component bolted onto a bespoke
 instrument; the research question is which components genuinely add return, cut risk, or are pure fee-in-a-suit.
 
+> **The synthesis paper — [`docs/derivatives_honesty.html`](docs/derivatives_honesty.html) ("Where the Fee Lives").**
+> All ten variations distilled into one law: a modification never conjures return — it *relocates risk onto an
+> axis the buyer isn't watching* (the tail, an unobservable mark, or the funding leg), and the honest exceptions
+> prove the rule. The reproducible detail follows below.
+
 **Variation #1 — straddles** ([`research/block_straddle_variations.py`](research/block_straddle_variations.py)):
 a Black-Scholes P&L simulator on the real SPY path (implied vol swept, since VIX isn't on the feed), across
 long/short straddle and OTM strangle. Findings: (1) **no edge without the vol-risk-premium** — at fair pricing
