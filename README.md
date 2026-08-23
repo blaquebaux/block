@@ -99,6 +99,20 @@ premium. Honest caveat: the lift is *gross* of daily-rehedging cost (cheap on SP
 underlying). So the added component (hedging) **pays the buyer** — cleaner harvest, same bet (brace, refined).
 *Next: regime-gate the hedged short (harvest in calm only) and calendar/diagonal (own the far tail cheaply) — the modifications that attack the tail.*
 
+**Variation #3 — calendar & diagonal: attacking the tail** ([`research/block_calendar_diagonal.py`](research/block_calendar_diagonal.py)):
+own a far-dated option to cap the short-vol catastrophe. Two structures vs the naked short. **Calendar**
+(short 1M + long 3M straddle, same strike) turns out to be **net long vol** — the far leg cancels the near's
+move and adds vega; it's a bleed/long-vol variant financed by near theta, not a safer harvest. **Diagonal**
+(short 1M ATM straddle + long 3M ±10% OTM wings) is the structurally correct tail cap — but on this data it
+made things **worse** (worst month −7%→−9%, Calmar +0.11→−0.02): the ±10% wings almost never triggered because
+2016–2026 *monthly* moves rarely reach 10%, so they were pure premium drag. **The honest trap runs both ways:**
+you can't judge a tail structure on a sample without the tail — the wings look like waste for the same reason
+the naked short looks safe (the SVXY-style −95% catastrophe isn't in monthly bars). **Verdict: unprovable on
+monthly data** — the diagonal is the *right* structure (bounded loss) but its value only shows in a real crisis
+this sample lacks. The methodological lesson is Block's core: **tail structures need tail data** (daily/intraday
+or a crisis window) — brace's real SVXY −95% outweighs any monthly backtest. *Next: re-run the diagonal on daily
+marks through the 2018/2020 vol spikes, then variance/vol swaps and the rates & credit blocks.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
