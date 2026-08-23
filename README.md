@@ -140,6 +140,24 @@ cushion to profit and both can still be wiped by one spike (maxDD −100%). brac
 *the strike matters more than the structure, and the tail is the whole story.* *Next: the rates block
 (swaps/swaptions) and the credit block (CDS/index) — genuinely new economics beyond the vol premium.*
 
+### Rates block — the term premium / duration carry
+
+**Rates #1 — does bearing duration pay?** ([`research/block_rates_termpremium.py`](research/block_rates_termpremium.py)):
+off the vol premium entirely, into new economics. Duration buckets (SHY/IEI/IEF/TLT) as total-return excess
+over cash (BIL), plus a 100d-trend gate. The honest scorecard: **(1) the term premium was *negative* this
+decade** — every bucket lost to cash (TLT −2.0%/yr) and the tail scaled straight with duration (TLT maxDD
+−52%, 2022 −32%); buy-and-hold duration did not pay 2016–2026. **(2) But bonds are the *crisis mirror* of the
+vol/equity block — and that's their value:** positive skew (opposite equity's), a flight-to-quality *rally* in
+COVID-2020 (+17.7% TLT) exactly as the short-vol book detonated, and a *different* catastrophe (2022 inflation,
+not a growth scare). You don't hold duration to earn — you hold it to be long the other side of equity's crash.
+**(3) Trend-timing bounds the tail but doesn't make edge:** the 100d gate cut 2022 from −32% to −11% and halved
+maxDD while keeping the 2020 upside and positive skew, but standalone Sharpe stayed ~0 (IEF +0.13, TLT −0.18) —
+a risk overlay, not alpha. **Discipline note:** the naive same-bar signal faked Sharpe +1.17; the one-bar-lag
+correction cut it to +0.13 — caught, both reported, honest one kept. **Verdict:** duration is a **near-null on
+carry but a real positive-skew, equity-crisis-mirror diversifier** — the honest reason a balanced book (family:
+[balanced](https://github.com/blaquebaux/balanced) / [bonds](https://github.com/blaquebaux/bonds)) holds it.
+*Next: carry/roll-down across the curve, then the credit block (CDS/index) — the default-risk premium.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
