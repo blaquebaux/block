@@ -194,6 +194,20 @@ the **buyer** when it genuinely *reduces* risk (Asian averaging) and the **desk*
 three-way's re-sold tail, the tranche's correlation, the CMS's vol mark) — *read the payoff to the tail, not the
 brochure*; and some structures are honest exposure, neither trick nor trap (the crack spread).
 
+**Variation #9 — FX exotics: the target-forward & the barrier put** ([`research/block_fx_exotics.py`](research/block_fx_exotics.py)):
+the FX block is the catalog's densest field of tail-hiding "corporate hedges." On GBP (which carries the 2016,
+2020 and 2022 crashes): **(1) The target-forward (TARF)** is asymmetry weaponized — its best outcome is *capped*
+at the +5% target (vs a plain forward strip's +141% symmetric upside), its worst is **−303%** (2× the strip's
+−151%, from downside leverage), skew **−1.56**, and any small win knocks it out (only ~1% of years reach the
+cap). You cannot win big, you can lose without limit — 2015-CHF and a graveyard of EM corporates in one payoff.
+**(2) The down-and-out put** sells you a 23% discount by *removing the tail*: in the windows that actually crashed
+through the barrier the vanilla put paid 6.9% while the down-and-out paid **0.0%** — crash insurance that cancels
+itself in a crash. **Verdict:** FX exotics sold to hedgers are the sharpest form of the program's law — marketed
+as risk *reduction* while they *add* catastrophic risk (the TARF inverts the tail into leverage; the barrier put
+deletes the cover). The discount/enhancement is always the tail, priced out. The honest FX counterpart is the
+**average-rate forward** (averaging genuinely cuts vol — a fair, cheaper hedge). *Read the payoff to the tail,
+not the brochure* — this closes the option-family sweep across vol, rates, credit, commodity, and FX.
+
 ### Rates block — the term premium / duration carry
 
 **Rates #1 — does bearing duration pay?** ([`research/block_rates_termpremium.py`](research/block_rates_termpremium.py)):
