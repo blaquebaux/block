@@ -110,8 +110,18 @@ you can't judge a tail structure on a sample without the tail — the wings look
 the naked short looks safe (the SVXY-style −95% catastrophe isn't in monthly bars). **Verdict: unprovable on
 monthly data** — the diagonal is the *right* structure (bounded loss) but its value only shows in a real crisis
 this sample lacks. The methodological lesson is Block's core: **tail structures need tail data** (daily/intraday
-or a crisis window) — brace's real SVXY −95% outweighs any monthly backtest. *Next: re-run the diagonal on daily
-marks through the 2018/2020 vol spikes, then variance/vol swaps and the rates & credit blocks.*
+or a crisis window) — brace's real SVXY −95% outweighs any monthly backtest.
+
+**Variation #3b — the diagonal on DAILY marks through 2018 & 2020** ([`research/block_diagonal_daily.py`](research/block_diagonal_daily.py)):
+re-run with daily valuation so the crisis paths are visible, and it resolves #3 *both ways*. **The cap is real
+and large:** in COVID the naked short's −21.6% intra-drawdown becomes the diagonal's **+6.9% gain**; in
+Feb-2018 Volmageddon −1.8% becomes **+3.0%** — the far wings pay exactly when needed, turning an open-ended
+tail into a bounded one. **But the insurance is expensive:** full-sample, the diagonal's daily-mark drawdown
+(−43%) is *worse* than the naked short's (−29%) — paying wing carry every calm day grinds a deeper long-run
+bleed than the crises it prevents. So it's **not a free lunch:** you trade an acute, potentially *terminal*
+blow-up (brace/SVXY) for a chronic, *survivable* bleed. The "right" short-vol structure is a **ruin-aversion
+choice, not a Sharpe one** — and only tail data could reveal it. *Next: variance/vol swaps (the cleaner VRP
+instrument), then the rates & credit blocks.*
 
 ## About Blaque Baux
 
