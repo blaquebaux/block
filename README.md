@@ -174,6 +174,24 @@ but it's a risk overlay on a crisis-mirror diversifier, not a harvested premium:
 hold duration this decade, it tells you *when* duration is least dangerous. *Next: the credit block (CDS/index)
 — the default-risk premium, the first genuinely earned premium to test since the VRP.*
 
+### Credit block — the default-risk premium
+
+**Credit #1 — real premium, or equity beta in a bond wrapper?** ([`research/block_credit_premium.py`](research/block_credit_premium.py)):
+strip the rate risk with a duration-matched Treasury to isolate the pure spread (IG = LQD−IEF, HY = HYG−IEI),
+then test the residual with the family toolkit (Jensen's alpha vs SPY + crisis correlation). Findings: **(1) a
+gross spread premium exists** — duration-stripped, IG earns +1.6%/yr and HY +3.0%/yr, so credit does pay for
+default risk. **(2) But it's equity beta in a wrapper, and *underpaid*:** beta to SPY +0.22 (IG) / +0.39 (HY),
+and Jensen's alpha is *negative* (−1.4% / −2.3%) — after the equity risk you're taking, the premium doesn't
+vanish, it goes negative (equity-like downside, sub-equity upside this decade). **(3) The crisis tell is
+definitive:** on equity's worst 5% days the spread crashes *with* stocks (corr **+0.71** IG, **+0.86** HY) and
+the skew is negative (IG **−1.77**) — zero diversification exactly when you need it. **The finding is the
+contrast:** credit is the mirror-*opposite* of duration — duration is negative-carry / positive-skew /
+crisis-*mirror*; credit is positive-carry / negative-skew / crisis-*correlated*. "Fixed income" is two opposite
+factors bolted together, and **only the duration half actually diversifies an equity book.** **Verdict:** the
+default-risk premium is not an independent earned premium here — it's underpaid equity beta wearing a bond's
+illiquidity; for a cross-asset book, HY credit is not diversification (hold equity directly, or duration for a
+real hedge). *Next: gate credit on a risk-on regime (does timing rescue it?), then FX / commodities carry.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
