@@ -224,6 +224,31 @@ fairly-priced, crash-prone premium into a small positive-alpha, tail-*managed* o
 thin) edge, and exactly on the program's thesis, the edge is *risk management*, not the premium. *Next and last
 asset block: commodities carry (backwardation / roll-yield) — completing Block's four-block cross-asset map.*
 
+### Commodities block — roll yield, and the four-block synthesis
+
+**Commodities #1 — roll yield / backwardation** ([`research/block_commodities_carry.py`](research/block_commodities_carry.py)):
+the last asset block. Commodity carry is roll yield — read from front-vs-deferred ETF pairs (USO/USL oil,
+UNG/UNL gas). Findings: **(1) the roll tax is the whole game** — WTI front bled +4.0%/yr to the 12-mo deferred,
+and natgas front lost −12.1%/yr (an **+11.2%/yr** roll tax) almost purely to contango; the curve state *is* the
+return. **(2) Carry-timing dodges the catastrophes** — holding the front only when backwardated turned oil-2020
+from −68% to +11% and fixed skew (−0.82 → −0.13); the one direct harvest is shorting persistent contango
+(natgas L/S +7.5%), but oil L/S was −1.8% when its curve flipped to backwardation — real but regime-dependent,
+with brutal idiosyncratic tails (maxDD −60% to −95%, oil went negative in 2020). **(3) Independence is partial,
+and gold is the prize** — broad commodities carry moderate equity beta (+0.32) but hedge inflation (2022 +18%);
+**gold** is the standout: Sharpe **+0.70**, near-zero equity beta (**+0.08**), low crisis-corr — the most
+independent, most diversifying single asset in the whole study.
+
+**The four-block synthesis (equity/vol · rates · credit · FX · commodities — the cross-asset map, complete).**
+Standalone "premia" mostly dissolve under the toolkit: **VRP** is a crash tail dressed as income, **credit** is
+underpaid equity beta in a wrapper, **FX & commodity carry** are priced roughly *fairly* with violent tails.
+The durable edges are **not premia** — they are **(1) diversification** (duration's crisis-mirror positive skew,
+and gold's near-zero beta actually hedge an equity book) and **(2) risk-management / timing** (the equity-vol
+gate that gave FX carry the arc's only positive alpha; curve-timing that dodges the commodity roll-tax). Block's
+founding thesis holds: **the value of a four-block book is in combination and risk control, not in any single
+harvested premium** — the edge is the portfolio, not the trade. *Next: fold gold + a duration hedge + the
+FX-carry gate into a governed cross-asset test book, and open the rates/credit sections of the 120-catalog
+variation program (swaptions, CDS index, tranche structures).*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
