@@ -158,6 +158,22 @@ carry but a real positive-skew, equity-crisis-mirror diversifier** — the hones
 [balanced](https://github.com/blaquebaux/balanced) / [bonds](https://github.com/blaquebaux/bonds)) holds it.
 *Next: carry/roll-down across the curve, then the credit block (CDS/index) — the default-risk premium.*
 
+**Rates #2 — carry / roll-down: the curve *slope* as the signal** ([`research/block_rates_carry.py`](research/block_rates_carry.py)):
+an upward-sloping curve pays you to hold duration (coupon + roll-down); an inverted one doesn't — so the right
+signal is the *level of the slope*, not price trend. Slope reconstructed price-only from ETF distribution
+yields (IEF yield − BIL cash yield). Findings: **(1) carry is a genuinely distinct signal** — it correlates
+just −0.09 with the trend gate, agreeing only 43% of days (trend reads fast price momentum; carry reads the
+slow curve state). **(2) Combining them is the best rates result yet:** trend-AND-carry on IEF lifts Sharpe
+−0.14 → **+0.30**, maxDD −28% → **−9%**, skew +0.17 → **+0.64**, 2022 −16% → −4%, on just 30% of days (TLT the
+same shape) — trend dodges the acute 2022 price crash, carry avoids the 2023 negative-carry inversion, each
+covering the other's blind spot. **(3) Honest caveats:** the distribution-yield proxy *lags* (carry-alone rode
+the full 2022 crash before registering the inversion in 2023), and even combined the excess return is thin
+(~+1%/yr) on one big regime — the win is **risk** (bounded tail, positive skew), not carry harvested.
+**Verdict:** carry is a real, distinct signal and **trend+carry is the honest best way to *hold* duration** —
+but it's a risk overlay on a crisis-mirror diversifier, not a harvested premium: the curve doesn't pay you to
+hold duration this decade, it tells you *when* duration is least dangerous. *Next: the credit block (CDS/index)
+— the default-risk premium, the first genuinely earned premium to test since the VRP.*
+
 ## About Blaque Baux
 
 **Blaque Baux** is a quantitative research initiative and a subsidiary of **[Carter Warrens](https://carterwarrens.com)**.
