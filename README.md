@@ -1,5 +1,7 @@
 # Blaque Baux Block
 
+> **RESEARCH · DERIVATIVES REFERENCE** &nbsp;|&nbsp; Python / Julia &nbsp;|&nbsp; [Interactive reference](https://www.blaquebaux.com/block/) &nbsp;|&nbsp; [Research corpus](https://www.blaquebaux.com/corpus/) &nbsp;|&nbsp; [Citation](CITATION.cff)
+
 **A block of derivative strategies, bundled into one book.**
 
 Block is a member of the Blaque Baux family. The [core repo](https://github.com/blaquebaux/base)
