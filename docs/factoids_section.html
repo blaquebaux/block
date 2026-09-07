@@ -1,10 +1,16 @@
 <!-- ============================================================================================
   Block-page factoids section — HAND-OFF for blaquebaux/site → block/index.html
-  Drop this <section> in after the "catalog-coverage" section. It's self-contained (scoped styles),
-  uses the page's own CSS vars (--red/--green/--blue/--amber/--ink/--muted/--line), and needs no JS.
-  Figures come from catalog/factoids.json (regenerate with catalog/build_factoids.py).
-  Methodology: composition/complexity/versatility are objective from the catalog; risk & fee-axis are
-  Blaque Baux heuristic classifications; usage tier is BIS-informed (category weights), not per-instrument notional.
+  Drop this <section> in after the "catalog-coverage" section. Self-contained (scoped styles + JS),
+  uses the page's own CSS vars (--red/--green/--blue/--amber/--ink/--muted/--line).
+
+  LIVE: fetches catalog/factoids.json from the block repo and renders from it, so regenerating
+  (catalog/build_factoids.py) + pushing block auto-updates this section — no site edit needed.
+    • Default source: the block repo raw URL (auto-updates on each block push).
+    • Prefer same-origin? Copy factoids.json into site (e.g. /block/factoids.json) and set FACTOIDS_URL
+      to "/block/factoids.json" — bulletproof (no CORS), but you re-copy on each update.
+  If the fetch fails (offline/CORS), it falls back to the embedded SNAPSHOT so the page never renders empty.
+  Method: composition/structure/complexity/versatility are objective; risk & fee-axis are Blaque Baux
+  heuristics; usage tier is BIS-informed (category weights), not per-instrument notional.
 ============================================================================================= -->
 <section class="catalog-factoids" aria-labelledby="factoids-title">
   <style>
@@ -33,6 +39,7 @@
     .bar-track{height:9px;background:var(--bg);border:1px solid var(--line)}
     .bar-fill{height:100%;background:var(--blue)}
     .factoids-note{margin-top:30px;color:var(--dim);font-size:11.5px;max-width:80ch;font-family:"IBM Plex Mono",monospace;line-height:1.6}
+    .factoids-note .live-tag{color:var(--green)} .factoids-note .stale-tag{color:var(--amber)}
   </style>
 
   <div class="shell">
@@ -43,84 +50,101 @@
       is read off BIS OTC category weights. The pattern that emerges: most of the complexity exists to move risk
       onto an axis the buyer isn't watching.</p>
 
-    <div class="factoid-strip">
-      <div class="factoid-tile"><b>120</b><span>derivative strategies mapped</span></div>
-      <div class="factoid-tile"><b>7</b><span>asset classes</span></div>
-      <div class="factoid-tile"><b>61 / 36 / 23</b><span>linear / optional / exotic</span></div>
-      <div class="factoid-tile"><b>56%</b><span>relocate risk off-axis</span></div>
-      <div class="factoid-tile"><b>16</b><span>carry genuine tail risk</span></div>
-    </div>
-
-    <div class="factoid-cols">
-      <!-- Where the fee lives -->
-      <div class="factoid-card">
-        <h3>Where the fee lives</h3>
-        <div class="factoid-row"><span class="nm">Honest / transparent</span><span class="pill honest">53</span></div>
-        <div class="factoid-row"><span class="nm">Unobservable mark (&sigma;/&rho;/path)</span><span class="pill mark">39</span></div>
-        <div class="factoid-row"><span class="nm">Tail (short-gamma / gap)</span><span class="pill tail">16</span></div>
-        <div class="factoid-row"><span class="nm">Funding / basis leg</span><span class="pill fund">12</span></div>
-      </div>
-
-      <!-- Riskiest -->
-      <div class="factoid-card">
-        <h3>Riskiest structures</h3>
-        <div class="factoid-row"><span class="nm">Barrier &amp; one-touch options (FX/EQ)</span><span class="pill tail">100</span></div>
-        <div class="factoid-row"><span class="nm">Variance / volatility swaps</span><span class="pill tail">94</span></div>
-        <div class="factoid-row"><span class="nm">Autocallable notes</span><span class="pill tail">85</span></div>
-        <div class="factoid-row"><span class="nm">CDS index tranches</span><span class="pill mark">—</span></div>
-        <div class="factoid-row"><span class="nm">Target-redemption forwards (TARF)</span><span class="pill tail">—</span></div>
-      </div>
-
-      <!-- Safest / most transparent -->
-      <div class="factoid-card">
-        <h3>Safest &amp; most transparent</h3>
-        <div class="factoid-row"><span class="nm">Exchange-traded futures</span><span class="pill honest">0</span></div>
-        <div class="factoid-row"><span class="nm">Weather derivatives</span><span class="pill honest">3</span></div>
-        <div class="factoid-row"><span class="nm">Commodity basis swaps</span><span class="pill honest">3</span></div>
-        <div class="factoid-row"><span class="nm">Municipal TRS / MMD rate lock</span><span class="pill honest">3</span></div>
-        <div class="factoid-row"><span class="nm">Average-rate (Asian) options</span><span class="pill honest">✓</span></div>
-      </div>
-
-      <!-- Most versatile -->
-      <div class="factoid-card">
-        <h3>Most versatile building blocks</h3>
-        <div class="factoid-row"><span class="nm">Futures contract</span><span class="val">36 combos</span></div>
-        <div class="factoid-row"><span class="nm">Interest-rate swap (IRS)</span><span class="val">9</span></div>
-        <div class="factoid-row"><span class="nm">Outright forward</span><span class="val">6</span></div>
-        <div class="factoid-row"><span class="nm">CDS index</span><span class="val">6</span></div>
-        <div class="factoid-row"><span class="nm">Total-return swap (TRS)</span><span class="val">6</span></div>
-      </div>
-
-      <!-- Composition by asset class -->
-      <div class="factoid-card">
-        <h3>By asset class</h3>
-        <div class="factoid-bars">
-          <div class="bar-row"><span>Rates</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span>30</span></div>
-          <div class="bar-row"><span>Equity</span><span class="bar-track"><span class="bar-fill" style="width:93%"></span></span><span>28</span></div>
-          <div class="bar-row"><span>FX</span><span class="bar-track"><span class="bar-fill" style="width:87%"></span></span><span>26</span></div>
-          <div class="bar-row"><span>Credit</span><span class="bar-track"><span class="bar-fill" style="width:50%"></span></span><span>15</span></div>
-          <div class="bar-row"><span>Commodity</span><span class="bar-track"><span class="bar-fill" style="width:47%"></span></span><span>14</span></div>
-          <div class="bar-row"><span>Municipal</span><span class="bar-track"><span class="bar-fill" style="width:13%"></span></span><span>4</span></div>
-          <div class="bar-row"><span>Funding</span><span class="bar-track"><span class="bar-fill" style="width:10%"></span></span><span>3</span></div>
-        </div>
-      </div>
-
-      <!-- Usage (BIS-informed) -->
-      <div class="factoid-card">
-        <h3>Rare vs. ubiquitous <span style="color:var(--dim)">(BIS-informed)</span></h3>
-        <div class="factoid-row"><span class="nm">Ubiquitous — vanilla swaps / forwards / futures</span><span class="val">34</span></div>
-        <div class="factoid-row"><span class="nm">Common — plain options, CDS index</span><span class="val">36</span></div>
-        <div class="factoid-row"><span class="nm">Specialist</span><span class="val">26</span></div>
-        <div class="factoid-row"><span class="nm">Rare / niche — barriers, tranches, path options</span><span class="val">24</span></div>
-        <div class="factoid-row"><span class="nm">Largest OTC class by notional</span><span class="val">Rates ~80%</span></div>
-      </div>
-    </div>
-
-    <p class="factoids-note">Method: composition, structure, complexity and versatility are counted directly from
-      the catalog. Risk score (0&ndash;100) and the fee-relocation axis are Blaque Baux heuristic classifications
-      &mdash; transparent, not market-measured. Usage tier reflects BIS OTC-derivatives category weights (an
-      informed classification, not per-instrument notional, which is not publicly disclosed). Regenerate anytime
-      with <code>catalog/build_factoids.py</code>.</p>
+    <div class="factoid-strip" id="fx-strip"></div>
+    <div class="factoid-cols" id="fx-cols"></div>
+    <p class="factoids-note" id="fx-note"></p>
   </div>
+
+  <script>
+  (function(){
+    // ---- source: block repo raw URL (auto-updates on each block push). Same-origin alt: "/block/factoids.json"
+    var FACTOIDS_URL = "https://raw.githubusercontent.com/blaquebaux/block/main/catalog/factoids.json";
+    // ---- fallback snapshot (used only if the fetch fails) --------------------------------------------
+    var SNAPSHOT = {"aggregate":{
+      "total":120,"by_asset_class":{"rates":30,"equity":28,"fx":26,"credit":15,"commodity":14,"municipal":4,"funding":3},
+      "by_structure":{"linear":61,"optional":36,"exotic":23},
+      "fee_axis":{"honest / transparent":53,"MARK (σ/ρ/path)":39,"TAIL":16,"FUNDING/basis":12},
+      "usage_tier":{"common":36,"ubiquitous":34,"specialist":26,"rare / niche":24},"pct_relocating":56,
+      "riskiest":[{"tag":"Touch FXD","name":"One-Touch / No-Touch","risk":100,"axis":"TAIL"},
+        {"tag":"Barrier FXD","name":"Barrier Option","risk":100,"axis":"TAIL"},
+        {"tag":"Var EQD","name":"Variance / Volatility Swap","risk":94,"axis":"TAIL"},
+        {"tag":"Autocall EQD","name":"Autocallable Note","risk":85,"axis":"TAIL"},
+        {"tag":"Digital FXD","name":"Digital Option","risk":94,"axis":"TAIL"}],
+      "safest":[{"tag":"Future","name":"Futures Contract","risk":0},{"tag":"Weather","name":"Weather Derivative","risk":3},
+        {"tag":"Basis Swap","name":"Commodity Basis Swap","risk":3},{"tag":"Muni TRS","name":"Municipal TRS","risk":3},
+        {"tag":"Asian","name":"Average-Rate (Asian) Option","risk":3}],
+      "most_versatile":[{"tag":"Future","name":"Futures Contract","versatility":36},{"tag":"IRS","name":"Interest Rate Swap","versatility":9},
+        {"tag":"Outright","name":"Outright Forward","versatility":6},{"tag":"CDS Index","name":"Credit Default Swap (Index)","versatility":6},
+        {"tag":"TRS","name":"Total Return Swap","versatility":6}]},
+      "_meta":{"bis_class_notes":{"rates":"largest OTC class (~80% of notional)"}}};
+
+    var CE=function(t,c,h){var e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+    function pillClass(axis){axis=(axis||"").toLowerCase();
+      return axis.indexOf("tail")>-1?"tail":axis.indexOf("mark")>-1?"mark":axis.indexOf("fund")>-1?"fund":"honest";}
+    function row(nm,pillTxt,pillCls,valTxt){
+      var r=CE("div","factoid-row"); r.appendChild(CE("span","nm",nm));
+      if(valTxt!=null) r.appendChild(CE("span","val",valTxt));
+      else r.appendChild(CE("span","pill "+pillCls, String(pillTxt)));
+      return r;}
+    function card(title){var c=CE("div","factoid-card"); c.appendChild(CE("h3",null,title)); return c;}
+
+    function render(data, live){
+      var a=data.aggregate||{}, strip=document.getElementById("fx-strip"), cols=document.getElementById("fx-cols");
+      strip.innerHTML=""; cols.innerHTML="";
+      var ac=a.by_asset_class||{}, st=a.by_structure||{}, fa=a.fee_axis||{}, ut=a.usage_tier||{};
+      var tile=function(b,s){var t=CE("div","factoid-tile"); t.appendChild(CE("b",null,b)); t.appendChild(CE("span",null,s)); return t;};
+      strip.appendChild(tile(a.total||"—","derivative strategies mapped"));
+      strip.appendChild(tile(Object.keys(ac).length||"—","asset classes"));
+      strip.appendChild(tile([st.linear,st.optional,st.exotic].join(" / "),"linear / optional / exotic"));
+      strip.appendChild(tile((a.pct_relocating!=null?a.pct_relocating+"%":"—"),"relocate risk off-axis"));
+      strip.appendChild(tile(fa["TAIL"]!=null?fa["TAIL"]:"—","carry genuine tail risk"));
+
+      // where the fee lives
+      var c1=card("Where the fee lives");
+      ["honest / transparent","MARK (σ/ρ/path)","TAIL","FUNDING/basis"].forEach(function(k){
+        if(fa[k]!=null) c1.appendChild(row(k.replace("honest / transparent","Honest / transparent"), fa[k], pillClass(k)));});
+      cols.appendChild(c1);
+      // riskiest
+      var c2=card("Riskiest structures");
+      (a.riskiest||[]).slice(0,6).forEach(function(x){c2.appendChild(row(x.name, x.risk, pillClass(x.axis)));});
+      cols.appendChild(c2);
+      // safest
+      var c3=card("Safest &amp; most transparent");
+      (a.safest||[]).slice(0,6).forEach(function(x){c3.appendChild(row(x.name, x.risk, "honest"));});
+      cols.appendChild(c3);
+      // most versatile
+      var c4=card("Most versatile building blocks");
+      (a.most_versatile||[]).slice(0,6).forEach(function(x){c4.appendChild(row(x.name, null, null, x.versatility+" combos"));});
+      cols.appendChild(c4);
+      // by asset class bars
+      var c5=card("By asset class");
+      var bars=CE("div","factoid-bars");
+      var entries=Object.keys(ac).map(function(k){return [k,ac[k]];}).sort(function(p,q){return q[1]-p[1];});
+      var max=entries.length?entries[0][1]:1;
+      entries.forEach(function(e){
+        var r=CE("div","bar-row"); r.appendChild(CE("span",null,e[0].charAt(0).toUpperCase()+e[0].slice(1)));
+        var tr=CE("span","bar-track"); tr.appendChild(CE("span","bar-fill")); tr.firstChild.style.width=Math.round(100*e[1]/max)+"%";
+        r.appendChild(tr); r.appendChild(CE("span",null,String(e[1]))); bars.appendChild(r);});
+      c5.appendChild(bars); cols.appendChild(c5);
+      // usage
+      var c6=card('Rare vs. ubiquitous <span style="color:var(--dim)">(BIS-informed)</span>');
+      var order=["ubiquitous","common","specialist","rare / niche"];
+      order.forEach(function(k){ if(ut[k]!=null) c6.appendChild(row(k.charAt(0).toUpperCase()+k.slice(1), null, null, String(ut[k]))); });
+      var bis=((data._meta||{}).bis_class_notes||{}).rates;
+      if(bis) c6.appendChild(row("Largest OTC class", null, null, "Rates ~80%"));
+      cols.appendChild(c6);
+
+      var note=document.getElementById("fx-note");
+      note.innerHTML='<span class="'+(live?"live-tag":"stale-tag")+'">'+(live?"● live":"● snapshot")+'</span> — '+
+        'composition, structure, complexity and versatility are counted directly from the catalog. Risk score (0–100) '+
+        'and the fee-relocation axis are Blaque Baux heuristic classifications — transparent, not market-measured. '+
+        'Usage tier reflects BIS OTC category weights (informed classification, not per-instrument notional). '+
+        'Regenerate with <code>catalog/build_factoids.py</code>.';
+    }
+
+    fetch(FACTOIDS_URL,{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(d){render(d,true);}).catch(function(){render(SNAPSHOT,false);});
+  })();
+  </script>
 </section>
 <!-- ========================================================================================= -->
