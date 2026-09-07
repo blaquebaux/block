@@ -1,0 +1,126 @@
+<!-- ============================================================================================
+  Block-page factoids section — HAND-OFF for blaquebaux/site → block/index.html
+  Drop this <section> in after the "catalog-coverage" section. It's self-contained (scoped styles),
+  uses the page's own CSS vars (--red/--green/--blue/--amber/--ink/--muted/--line), and needs no JS.
+  Figures come from catalog/factoids.json (regenerate with catalog/build_factoids.py).
+  Methodology: composition/complexity/versatility are objective from the catalog; risk & fee-axis are
+  Blaque Baux heuristic classifications; usage tier is BIS-informed (category weights), not per-instrument notional.
+============================================================================================= -->
+<section class="catalog-factoids" aria-labelledby="factoids-title">
+  <style>
+    .catalog-factoids{padding:56px 0;border-top:1px solid var(--line)}
+    .catalog-factoids .micro{color:var(--dim);letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-family:"IBM Plex Mono",monospace}
+    .catalog-factoids h2{font-size:clamp(24px,3vw,38px);margin:.3em 0 .2em;color:var(--ink)}
+    .catalog-factoids .factoids-lead{color:var(--muted);max-width:70ch;margin:0 0 34px}
+    .factoid-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:40px}
+    .factoid-tile{background:var(--paper);padding:18px 20px}
+    .factoid-tile b{font-family:"IBM Plex Mono",monospace;font-size:30px;color:var(--ink);display:block;line-height:1}
+    .factoid-tile span{display:block;margin-top:8px;color:var(--muted);font-size:12.5px}
+    .factoid-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px}
+    .factoid-card{background:var(--panel);border:1px solid var(--line);padding:20px 22px}
+    .factoid-card h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+    .factoid-row{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+    .factoid-row:last-child{border-bottom:0}
+    .factoid-row .nm{flex:1;color:var(--ink);font-size:13.5px}
+    .factoid-row .val{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted)}
+    .pill{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:2px 7px;border-radius:2px;white-space:nowrap}
+    .pill.tail{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red)}
+    .pill.mark{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+    .pill.fund{background:color-mix(in srgb,var(--amber) 18%,transparent);color:var(--amber)}
+    .pill.honest{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green)}
+    .factoid-bars{display:grid;gap:7px;margin-top:2px}
+    .bar-row{display:grid;grid-template-columns:82px 1fr 34px;align-items:center;gap:10px;font-size:12.5px;color:var(--muted)}
+    .bar-track{height:9px;background:var(--bg);border:1px solid var(--line)}
+    .bar-fill{height:100%;background:var(--blue)}
+    .factoids-note{margin-top:30px;color:var(--dim);font-size:11.5px;max-width:80ch;font-family:"IBM Plex Mono",monospace;line-height:1.6}
+  </style>
+
+  <div class="shell">
+    <div class="micro">Catalog analysis / by the numbers</div>
+    <h2 id="factoids-title">What the catalog reveals.</h2>
+    <p class="factoids-lead">Beyond the 120 descriptions, the catalog itself is data. Composition and structure are
+      counted directly; risk and the "where the fee lives" axis are Blaque Baux classifications; real-market usage
+      is read off BIS OTC category weights. The pattern that emerges: most of the complexity exists to move risk
+      onto an axis the buyer isn't watching.</p>
+
+    <div class="factoid-strip">
+      <div class="factoid-tile"><b>120</b><span>derivative strategies mapped</span></div>
+      <div class="factoid-tile"><b>7</b><span>asset classes</span></div>
+      <div class="factoid-tile"><b>61 / 36 / 23</b><span>linear / optional / exotic</span></div>
+      <div class="factoid-tile"><b>56%</b><span>relocate risk off-axis</span></div>
+      <div class="factoid-tile"><b>16</b><span>carry genuine tail risk</span></div>
+    </div>
+
+    <div class="factoid-cols">
+      <!-- Where the fee lives -->
+      <div class="factoid-card">
+        <h3>Where the fee lives</h3>
+        <div class="factoid-row"><span class="nm">Honest / transparent</span><span class="pill honest">53</span></div>
+        <div class="factoid-row"><span class="nm">Unobservable mark (&sigma;/&rho;/path)</span><span class="pill mark">39</span></div>
+        <div class="factoid-row"><span class="nm">Tail (short-gamma / gap)</span><span class="pill tail">16</span></div>
+        <div class="factoid-row"><span class="nm">Funding / basis leg</span><span class="pill fund">12</span></div>
+      </div>
+
+      <!-- Riskiest -->
+      <div class="factoid-card">
+        <h3>Riskiest structures</h3>
+        <div class="factoid-row"><span class="nm">Barrier &amp; one-touch options (FX/EQ)</span><span class="pill tail">100</span></div>
+        <div class="factoid-row"><span class="nm">Variance / volatility swaps</span><span class="pill tail">94</span></div>
+        <div class="factoid-row"><span class="nm">Autocallable notes</span><span class="pill tail">85</span></div>
+        <div class="factoid-row"><span class="nm">CDS index tranches</span><span class="pill mark">—</span></div>
+        <div class="factoid-row"><span class="nm">Target-redemption forwards (TARF)</span><span class="pill tail">—</span></div>
+      </div>
+
+      <!-- Safest / most transparent -->
+      <div class="factoid-card">
+        <h3>Safest &amp; most transparent</h3>
+        <div class="factoid-row"><span class="nm">Exchange-traded futures</span><span class="pill honest">0</span></div>
+        <div class="factoid-row"><span class="nm">Weather derivatives</span><span class="pill honest">3</span></div>
+        <div class="factoid-row"><span class="nm">Commodity basis swaps</span><span class="pill honest">3</span></div>
+        <div class="factoid-row"><span class="nm">Municipal TRS / MMD rate lock</span><span class="pill honest">3</span></div>
+        <div class="factoid-row"><span class="nm">Average-rate (Asian) options</span><span class="pill honest">✓</span></div>
+      </div>
+
+      <!-- Most versatile -->
+      <div class="factoid-card">
+        <h3>Most versatile building blocks</h3>
+        <div class="factoid-row"><span class="nm">Futures contract</span><span class="val">36 combos</span></div>
+        <div class="factoid-row"><span class="nm">Interest-rate swap (IRS)</span><span class="val">9</span></div>
+        <div class="factoid-row"><span class="nm">Outright forward</span><span class="val">6</span></div>
+        <div class="factoid-row"><span class="nm">CDS index</span><span class="val">6</span></div>
+        <div class="factoid-row"><span class="nm">Total-return swap (TRS)</span><span class="val">6</span></div>
+      </div>
+
+      <!-- Composition by asset class -->
+      <div class="factoid-card">
+        <h3>By asset class</h3>
+        <div class="factoid-bars">
+          <div class="bar-row"><span>Rates</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span>30</span></div>
+          <div class="bar-row"><span>Equity</span><span class="bar-track"><span class="bar-fill" style="width:93%"></span></span><span>28</span></div>
+          <div class="bar-row"><span>FX</span><span class="bar-track"><span class="bar-fill" style="width:87%"></span></span><span>26</span></div>
+          <div class="bar-row"><span>Credit</span><span class="bar-track"><span class="bar-fill" style="width:50%"></span></span><span>15</span></div>
+          <div class="bar-row"><span>Commodity</span><span class="bar-track"><span class="bar-fill" style="width:47%"></span></span><span>14</span></div>
+          <div class="bar-row"><span>Municipal</span><span class="bar-track"><span class="bar-fill" style="width:13%"></span></span><span>4</span></div>
+          <div class="bar-row"><span>Funding</span><span class="bar-track"><span class="bar-fill" style="width:10%"></span></span><span>3</span></div>
+        </div>
+      </div>
+
+      <!-- Usage (BIS-informed) -->
+      <div class="factoid-card">
+        <h3>Rare vs. ubiquitous <span style="color:var(--dim)">(BIS-informed)</span></h3>
+        <div class="factoid-row"><span class="nm">Ubiquitous — vanilla swaps / forwards / futures</span><span class="val">34</span></div>
+        <div class="factoid-row"><span class="nm">Common — plain options, CDS index</span><span class="val">36</span></div>
+        <div class="factoid-row"><span class="nm">Specialist</span><span class="val">26</span></div>
+        <div class="factoid-row"><span class="nm">Rare / niche — barriers, tranches, path options</span><span class="val">24</span></div>
+        <div class="factoid-row"><span class="nm">Largest OTC class by notional</span><span class="val">Rates ~80%</span></div>
+      </div>
+    </div>
+
+    <p class="factoids-note">Method: composition, structure, complexity and versatility are counted directly from
+      the catalog. Risk score (0&ndash;100) and the fee-relocation axis are Blaque Baux heuristic classifications
+      &mdash; transparent, not market-measured. Usage tier reflects BIS OTC-derivatives category weights (an
+      informed classification, not per-instrument notional, which is not publicly disclosed). Regenerate anytime
+      with <code>catalog/build_factoids.py</code>.</p>
+  </div>
+</section>
+<!-- ========================================================================================= -->
